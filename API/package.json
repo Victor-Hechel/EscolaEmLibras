@@ -1,0 +1,26 @@
+{
+  "name": "escolalibras",
+  "version": "1.0.0",
+  "description": "API do projeto Escola em Libras",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon  --trace-deprecation src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "libras"
+  ],
+  "author": "Victor Colares",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.12"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "nodemon": "^2.0.7"
+  }
+}
