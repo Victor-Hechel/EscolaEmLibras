@@ -1,19 +1,14 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
+import UsuarioModel from "./Usuario.js"
 const { Schema, model } = mongoose
 
 
-const alunoSchema = new Schema({
-    cpf: { type: String, unique: true, required: true },
-    nome: { type: String, required: true },
-    dataNascimento: Date,
-    email: { type: String, unique: true, required: true },
-    genero: String,
-    tipo: Number,
-    senha: String,
-    disabled: Boolean,
-    pontos: Number
-})
+const options = { discriminatorKey: 'kind' }
 
-const AlunoModel = model('Aluno', alunoSchema)
+const alunoSchema = new Schema({
+    pontos: Number
+}, options)
+
+const AlunoModel = UsuarioModel.discriminator('Aluno', alunoSchema)
 
 export default AlunoModel
