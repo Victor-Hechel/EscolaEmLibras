@@ -1,6 +1,7 @@
 import { Router } from "express"
 import AdminRoutes from "./AdminRoutes.js"
 import AlunoRoutes from "./AlunoRoutes.js"
+import ProfessorRoutes from "./ProfessorRoutes.js"
 
 export default class RoutesManager {
 
@@ -11,6 +12,7 @@ export default class RoutesManager {
     initializeRoutes(){
         this.initializeAdmin()
         this.initializeAluno()
+        this.initializeProfessor()
     }
 
     initializeAdmin(){
@@ -21,5 +23,10 @@ export default class RoutesManager {
     initializeAluno(){
         const router = AlunoRoutes.initializeRoutes(Router())
         this.app.use('/aluno', router)
+    }
+
+    initializeProfessor(){
+        const router = ProfessorRoutes.initializeRoutes(Router())
+        this.app.use('/professor', router)
     }
 }
