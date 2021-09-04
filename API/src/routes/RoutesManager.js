@@ -62,8 +62,8 @@ export default class RoutesManager {
     initializeTarefa(){
         const router = TarefaRoutes.initializeRoutes(Router())
         this.app.use('/tarefa', 
-            // Authentication.authentication, 
-            // Authentication.authorization(["Professor"]),
+            Authentication.authentication, 
+            Authentication.authorization(["Professor"]),
             router)
     }
 
