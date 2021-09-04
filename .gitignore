@@ -1,3 +1,6 @@
+# Uploads
+API/uploads/*
+
 # Logs
 logs
 *.log
