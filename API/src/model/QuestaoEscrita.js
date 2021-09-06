@@ -4,8 +4,8 @@ import QuestaoSchema from "./Questao.js"
 
 const options = { discriminatorKey: 'kind' }
 
-const QuestaoRespostaSchema = new Schema({ }, options)
+const QuestaoEscritaSchema = new Schema({ }, options)
 
-const QuestaoRespostaModel = QuestaoSchema.discriminator('QuestaoResposta', QuestaoRespostaSchema)
+const QuestaoEscritaModel = QuestaoSchema.discriminator('QuestaoEscrita', QuestaoEscritaSchema)
 
-export default QuestaoRespostaModel
+export default QuestaoEscritaModel

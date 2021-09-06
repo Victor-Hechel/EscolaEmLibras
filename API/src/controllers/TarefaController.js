@@ -1,7 +1,11 @@
 import TarefaModel from "../model/Tarefa.js"
+import RespostaModel from "../model/Resposta.js"
 import QuestaoEscritaModel from "../model/QuestaoEscrita.js"
 import QuestaoMultiplaModel from "../model/QuestaoMultipla.js"
 import QuestaoParesModel from "../model/QuestaoPares.js"
+import QuestaoEscritaRespostaModel from "../model/QuestaoEscritaResposta.js"
+import QuestaoMultiplaRespostaModel from "../model/QuestaoMultiplaResposta.js"
+import QuestaoParesRespostaModel from "../model/QuestaoParesResposta.js"
 
 export default class TarefaController {
 
@@ -13,6 +17,11 @@ export default class TarefaController {
             disciplina: req.body.disciplina
         })
 
+        const respostaModel = new RespostaModel({
+            tarefa: tarefaModel._id,
+            questoes: []
+        })
+
         for(const questao of req.body.questoes){
 
             const questaoBody = {
@@ -21,27 +30,60 @@ export default class TarefaController {
             }
 
             let questaoModel
+            let questaoRespostaModel
 
             if(questao.tipo == 'multipla'){
                 questaoBody.alternativas = questao.alternativas.map(alt => (
-                    { letra: alt.letra, texto: alt.texto }
+                    { texto: alt.texto, midia: alt.midia }
                 ))
 
                 questaoModel = new QuestaoMultiplaModel(questaoBody)
+                
+                const alternativaCorreta = questao.alternativas.find(alt => alt.correta == true)
+                console.log(questaoBody)
+                const alternativaCorretaId = questaoModel.alternativas.find(alt => alt.texto == alternativaCorreta.texto || alt.midia == alternativaCorreta.midia)._id
+
+                questaoRespostaModel = new QuestaoMultiplaRespostaModel({
+                    alternativa: alternativaCorretaId
+                })
+
             }else if(questao.tipo == 'escrita') {
                 questaoModel = new QuestaoEscritaModel(questaoBody)
+                questaoRespostaModel = new QuestaoEscritaRespostaModel({
+                    resposta: questao.resposta
+                })
             }
             else if(questao.tipo == 'pares') {
                 questaoBody.colunaEsquerda = questao.colunaEsquerda
                 questaoBody.colunaDireita = questao.colunaDireita
                 questaoModel = new QuestaoParesModel(questaoBody)
+
+                questaoRespostaModel = new QuestaoParesRespostaModel({
+                    pares: questaoModel.colunaEsquerda.map((item, i) => 
+                        (
+                            {
+                                colunaEsquerda: item._id,
+                                colunaDireita: questaoModel.colunaDireita[i]._id
+                            }
+                        )
+                    )
+                })
+
             }
+
             tarefaModel.questoes.push(questaoModel)
+            questaoRespostaModel.questao = questaoModel._id
+            respostaModel.questoes.push(questaoRespostaModel)
         }
 
         try{
             await tarefaModel.save()
-            for(const questao of tarefaModel.questoes){
+            for(let questao of tarefaModel.questoes){
+                await questao.save()
+            }
+
+            await respostaModel.save()
+            for(let questao of respostaModel.questoes){
                 await questao.save()
             }
 
