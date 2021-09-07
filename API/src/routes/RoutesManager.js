@@ -7,6 +7,7 @@ import Authentication from "../middlewares/Authentication.js"
 import TurmaRoutes from "./TurmaRoutes.js"
 import TarefaRoutes from "./TarefaRoutes.js"
 import MediaRoutes from "./MediaRoutes.js"
+import RespostaRoutes from "./RespostaRoutes.js"
 
 export default class RoutesManager {
 
@@ -22,6 +23,7 @@ export default class RoutesManager {
         this.initializeTurma()
         this.initializeTarefa()
         this.initializeMedia()
+        this.initializeResposta()
     }
 
     initializeRoot(){
@@ -72,8 +74,14 @@ export default class RoutesManager {
         this.app.use('/media',
             Authentication.authentication,
             Authentication.authorization(["Professor"]),
-            router)
-        
+            router)    
     }
 
+    initializeResposta(){
+        const router = RespostaRoutes.initializeRoutes(Router())
+        this.app.use('/resposta',
+            Authentication.authentication,
+            Authentication.authorization(["Aluno"]),
+            router)    
+    }
 }
