@@ -50,7 +50,7 @@ export default class TarefaController {
             }else if(questao.tipo == 'escrita') {
                 questaoModel = new QuestaoEscritaModel(questaoBody)
                 questaoRespostaModel = new QuestaoEscritaRespostaModel({
-                    resposta: questao.resposta
+                    respostaQuestao: questao.resposta
                 })
             }
             else if(questao.tipo == 'pares') {
