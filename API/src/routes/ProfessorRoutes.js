@@ -3,11 +3,12 @@ import ProfessorController from "../controllers/ProfessorController.js"
 export default class ProfessorRoutes {
 
     static initializeRoutes(router){
-        router.get('/', ProfessorController.list)
-        router.get('/:id', ProfessorController.get)
-        router.post('/', ProfessorController.create)
-        router.put('/', ProfessorController.update)
-        router.patch('/disable/:id', ProfessorController.disable)
+        const controller =  new ProfessorController()
+        router.get('/', controller.list.bind(controller))
+        router.get('/:id', controller.get.bind(controller))
+        router.post('/', controller.create.bind(controller))
+        router.put('/', controller.update.bind(controller))
+        router.patch('/disable/:id', controller.disable.bind(controller))
 
         return router
     }

@@ -1,118 +1,174 @@
 import ProfessorModel from "../model/Professor.js"
 import { createHmac } from 'crypto'
+import ProfessorService from "../services/ProfessorService.js";
 
 const secret = "pwdSecretTest"
 
 export default class ProfessorController {
 
-    static list(req, resp, next) {
+    professorService;
 
-        ProfessorModel.find({}).exec()
-            .then(professores => {
-                if(!professores.length){
-                    resp.status(204).json()
-                    return;
-                }
-                resp.status(200).json({ professores })
-            })
-            .catch(err => resp.status(500).json(err))
+    constructor(){
+        this.professorService = new ProfessorService()
     }
 
-    static get(req, resp, next) {
+    async list(req, resp, next) {
 
-        const id  = req.params.id
+        try{
+            const professores = await this.professorService.listarTodos()
 
-        ProfessorModel.findById(id).exec()
-            .then(user => {
-                if(!user){
-                    resp.status(204).json()
-                    return;
-                }
-                    
-                resp.status(200).json({ user })
+            resp.status(200).json({
+                professores: professores.map(x => ({
+                    id: x._id,
+                    nome: x.nome,
+                    dataNascimento: x.dataNascimento,
+                    email: x.email,
+                    genero: x.genero,
+                    desabilitado: x.disabled
+                }))
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar listar professores"
             })
+        }
+
     }
 
-    static async create(req, resp, next) {
+    async get(req, resp, next) {
 
-        const user = req.body
-        user.senha = createHmac('sha256', secret)
-            .update(user.senha)
-            .digest('hex')
+        const id = req.params.id
 
-        const professor = new ProfessorModel(user)
+        try{
+            const professor = await this.professorService.buscarPorId(id)
 
-        professor.save()
-            .then(userResp => resp.status(201).json({ userResp }))
-            .catch(err => {
-                resp.status(500).json(err)   
-            })
-    }
+            if(!professor){
+                resp.status(204).send()
+                return
+            }
 
-    static update(req, resp, next) {
-
-        const id  = req.body.id
-
-        const reqBody = req.body
-
-        ProfessorModel.findById(id).exec()
-            .then(user => {
-                if(!user){
-                    resp.status(204).json()
-                    return;
+            resp.status(200).json({
+                professor: {
+                    id: professor._id,
+                    nome: professor.nome,
+                    dataNascimento: professor.dataNascimento,
+                    email: professor.email,
+                    genero: professor.genero,
+                    desabilitado: professor.disabled
                 }
-                
-                user.cpf = reqBody.cpf
-                user.nome = reqBody.nome
-                user.dataNascimento = reqBody.dataNascimento
-                user.email = reqBody.email
-                user.genero = reqBody.genero
-                user.tipo = reqBody.tipo
-
-                user.senha = createHmac('sha256', secret)
-                    .update(reqBody.senha)
-                    .digest('hex')
-
-                user.save()
-                    .then(userResp => resp.status(201).json({ userResp }))
-                    .catch(err => {
-                        resp.status(500).json(err)   
-                    })
-
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar buscar professor"
             })
-
+        }
+        
         
     }
 
-    static disable(req, resp, next) {
+    async create(req, resp, next) {
+
+        const professorBody = req.body
+        professorBody.password = createHmac('sha256', secret)
+            .update(professorBody.senha)
+            .digest('hex')
+
+        try{
+            const professor = await this.professorService.inserir(professorBody)
+
+            resp.status(201).json({
+                professor: {
+                    id: professor._id,
+                    nome: professor.nome,
+                    dataNascimento: professor.dataNascimento,
+                    email: professor.email,
+                    genero: professor.genero,
+                }
+            })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar inserir professor"
+            })
+        }
+        
+    }
+
+    async update(req, resp) {
+
+        const professorBody = req.body
+        try{
+            const professor = await this.professorService.buscarPorId(professorBody.id)
+
+            if(!professor){
+                resp.status(204).send()
+                return
+            }
+
+            professor.cpf = professorBody.cpf
+            professor.nome = professorBody.nome
+            professor.dataNascimento = professorBody.dataNascimento
+            professor.email = professorBody.email
+            professor.genero = professorBody.genero
+            professor.tipo = professorBody.tipo
+            professor.password = createHmac('sha256', secret)
+                .update(professorBody.senha)
+                .digest('hex')        
+
+            await this.professorService.atualizar(professor)
+
+            resp.status(201).json({
+                professor: {
+                    id: professor._id,
+                    nome: professor.nome,
+                    dataNascimento: professor.dataNascimento,
+                    email: professor.email,
+                    genero: professor.genero,
+                }
+            })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar atualizar o professor"
+            })
+        }
+        
+    }
+
+    async disable(req, resp, next) {
 
         const id  = req.params.id
 
-        ProfessorModel.findById(id).exec()
-            .then(user => {
-                if(!user){
-                    resp.status(204).json()
-                    return;
+        try{
+            const professor = await this.professorService.buscarPorId(id)
+
+            if(!professor){
+                resp.status(204).send()
+                return
+            }
+
+            professor.disabled = true
+
+            await this.professorService.atualizar(professor)
+
+            resp.status(201).json({
+                professor: {
+                    id: professor._id,
+                    nome: professor.nome,
+                    dataNascimento: professor.dataNascimento,
+                    email: professor.email,
+                    genero: professor.genero,
+                    desabilitado: professor.disabled
                 }
-                
-                user.disabled = true
-
-                user.save()
-                    .then(userResp => resp.status(201).json({ userResp }))
-                    .catch(err => {
-                        resp.status(500).json(err)   
-                    })
-
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        } catch(err) {
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar atualizar o professor"
             })
+        }
 
     }
 

@@ -1,4 +1,3 @@
-import AdminModel from "../model/Admin.js"
 import { createHmac } from 'crypto'
 import AdminService from "../services/AdminService.js";
 
