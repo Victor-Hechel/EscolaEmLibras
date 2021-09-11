@@ -16,6 +16,7 @@ export default class Authentication {
       
         jwt.verify(token, secret, (err, decoded) => {
           if (err) {
+            console.log(err)
             return res.status(401).send({ message: "Unauthorized!" });
           }
           req.userId = decoded.id;
@@ -26,10 +27,10 @@ export default class Authentication {
 
     static authorization(roles){
         return (req, res, next) => {
-            if(!roles.includes(req.user.kind)){
-                return res.status(401).send({ message: `Usuário ${req.user.kind} não tem acesso ao recurso` });
-            }
-            next();
+          if(!roles.includes(req.user.kind)){
+              return res.status(401).send({ message: `Usuário ${req.user.kind} não tem acesso ao recurso` });
+          }
+          next();
         }
     }
 }

@@ -1,118 +1,178 @@
-import AlunoModel from "../model/Aluno.js"
 import { createHmac } from 'crypto'
+import AlunoService from "../services/AlunoService.js";
 
 const secret = "pwdSecretTest"
 
 export default class AlunoController {
 
-    static list(req, resp, next) {
+    alunoService;
 
-        AlunoModel.find({}).exec()
-            .then(alunos => {
-                if(!alunos.length){
-                    resp.status(204).json()
-                    return;
-                }
-                resp.status(200).json({ alunos })
-            })
-            .catch(err => resp.status(500).json(err))
+    constructor(){
+        this.alunoService = new AlunoService()
     }
 
-    static get(req, resp, next) {
+    async list(req, resp) {
 
-        const id  = req.params.id
+        try{
+            const alunos = await this.alunoService.listarTodos()
 
-        AlunoModel.findById(id).exec()
-            .then(user => {
-                if(!user){
-                    resp.status(204).json()
-                    return;
-                }
-                    
-                resp.status(200).json({ user })
+            resp.status(200).json({
+                alunos: alunos.map(x => ({
+                    id: x._id,
+                    nome: x.nome,
+                    dataNascimento: x.dataNascimento,
+                    email: x.email,
+                    genero: x.genero,
+                    pontos: x.pontos,
+                    desabilitado: x.disabled
+                }))
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar listar alunos"
             })
+        }
+
     }
 
-    static async create(req, resp, next) {
+    async get(req, resp) {
 
-        const user = req.body
-        user.password = createHmac('sha256', secret)
-            .update(user.senha)
-            .digest('hex')
+        const id = req.params.id
 
-        const aluno = new AlunoModel(user)
+        try{
+            const aluno = await this.alunoService.buscarPorId(id)
 
-        aluno.save()
-            .then(userResp => resp.status(201).json({ userResp }))
-            .catch(err => {
-                resp.status(500).json(err)   
-            })
-    }
+            if(!aluno){
+                resp.status(204).send()
+                return
+            }
 
-    static update(req, resp, next) {
-
-        const id  = req.body.id
-
-        const reqBody = req.body
-
-        AlunoModel.findById(id).exec()
-            .then(user => {
-                if(!user){
-                    resp.status(204).json()
-                    return;
+            resp.status(200).json({
+                aluno: {
+                    id: aluno._id,
+                    nome: aluno.nome,
+                    dataNascimento: aluno.dataNascimento,
+                    email: aluno.email,
+                    genero: aluno.genero,
+                    pontos: aluno.pontos,
+                    desabilitado: aluno.disabled
                 }
-                
-                user.cpf = reqBody.cpf
-                user.nome = reqBody.nome
-                user.dataNascimento = reqBody.dataNascimento
-                user.email = reqBody.email
-                user.genero = reqBody.genero
-                user.tipo = reqBody.tipo
-                user.pontos = reqBody.pontos
-                user.password = createHmac('sha256', secret)
-                    .update(reqBody.senha)
-                    .digest('hex')
-
-                user.save()
-                    .then(userResp => resp.status(201).json({ userResp }))
-                    .catch(err => {
-                        resp.status(500).json(err)   
-                    })
-
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar buscar aluno"
             })
-
+        }
+        
         
     }
 
-    static disable(req, resp, next) {
+    async create(req, resp) {
+
+        const alunoBody = req.body
+        alunoBody.password = createHmac('sha256', secret)
+            .update(alunoBody.senha)
+            .digest('hex')
+
+        try{
+            const aluno = await this.alunoService.inserir(alunoBody)
+
+            resp.status(201).json({
+                aluno: {
+                    id: aluno._id,
+                    nome: aluno.nome,
+                    dataNascimento: aluno.dataNascimento,
+                    email: aluno.email,
+                    genero: aluno.genero,
+                    pontos: aluno.pontos
+                }
+            })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar inserir aluno"
+            })
+        }
+        
+    }
+
+    async update(req, resp) {
+
+        const alunoBody = req.body
+        try{
+            const aluno = await this.alunoService.buscarPorId(alunoBody.id)
+
+            if(!aluno){
+                resp.status(204).send()
+                return
+            }
+
+            aluno.cpf = alunoBody.cpf
+            aluno.nome = alunoBody.nome
+            aluno.dataNascimento = alunoBody.dataNascimento
+            aluno.email = alunoBody.email
+            aluno.genero = alunoBody.genero
+            aluno.tipo = alunoBody.tipo
+            aluno.pontos = alunoBody.pontos
+            aluno.password = createHmac('sha256', secret)
+                .update(alunoBody.senha)
+                .digest('hex')        
+
+            await this.alunoService.atualizar(aluno)
+
+            resp.status(201).json({
+                aluno: {
+                    id: aluno._id,
+                    nome: aluno.nome,
+                    dataNascimento: aluno.dataNascimento,
+                    email: aluno.email,
+                    genero: aluno.genero,
+                    pontos: aluno.pontos
+                }
+            })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar atualizar o aluno"
+            })
+        }
+        
+    }
+
+    async disable(req, resp) {
 
         const id  = req.params.id
 
-        AlunoModel.findById(id).exec()
-            .then(user => {
-                if(!user){
-                    resp.status(204).json()
-                    return;
+        try{
+            const aluno = await this.alunoService.buscarPorId(id)
+
+            if(!aluno){
+                resp.status(204).send()
+                return
+            }
+
+            aluno.disabled = true
+
+            await this.alunoService.atualizar(aluno)
+
+            resp.status(201).json({
+                aluno: {
+                    id: aluno._id,
+                    nome: aluno.nome,
+                    dataNascimento: aluno.dataNascimento,
+                    email: aluno.email,
+                    genero: aluno.genero,
+                    desabilitado: aluno.disabled
                 }
-                
-                user.disabled = true
-
-                user.save()
-                    .then(userResp => resp.status(201).json({ userResp }))
-                    .catch(err => {
-                        resp.status(500).json(err)   
-                    })
-
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        } catch(err) {
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar atualizar o aluno"
             })
+        }
 
     }
 

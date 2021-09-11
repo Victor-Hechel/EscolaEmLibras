@@ -31,7 +31,14 @@ export default class RootController {
                 });
             }
 
-            var token = jwt.sign({ id: user.id, user }, secret, {
+            const userData = {
+                kind: user.kind,
+                id: user._id,
+                email: user.email,
+                senha: user.senha
+            }
+
+            var token = jwt.sign({ id: user.id, user: userData }, secret, {
                 expiresIn: 86400 // 24 hours
             });
 
