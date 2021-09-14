@@ -2,8 +2,8 @@ import MediaController from "../controllers/MediaController.js"
 
 export default class MediaRoutes {
     static initializeRoutes(router) {
-
-        router.post('/', MediaController.upload)
+        const controller = new MediaController()
+        router.post('/', controller.upload.bind(controller))
 
         return router
     }

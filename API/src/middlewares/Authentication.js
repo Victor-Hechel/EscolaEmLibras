@@ -20,15 +20,15 @@ export default class Authentication {
             return res.status(401).send({ message: "Unauthorized!" });
           }
           req.userId = decoded.id;
-          req.user = decoded.user;
+          req.usuario = decoded.usuario;
           next();
         });
       };
 
     static authorization(roles){
         return (req, res, next) => {
-          if(!roles.includes(req.user.kind)){
-              return res.status(401).send({ message: `Usuário ${req.user.kind} não tem acesso ao recurso` });
+          if(!roles.includes(req.usuario.kind)){
+              return res.status(401).send({ message: `Usuário ${req.usuario.kind} não tem acesso ao recurso` });
           }
           next();
         }
