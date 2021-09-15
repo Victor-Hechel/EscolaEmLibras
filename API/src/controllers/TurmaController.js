@@ -1,106 +1,82 @@
 import TurmaModel from "../model/Turma.js"
 import DisciplinaModel from "../model/Disciplina.js"
+import TurmaService from "../services/TurmaService.js"
 
 export default class TurmaController {
 
-    static list(req, resp, next) {
-
-        TurmaModel.find({}).exec()
-            .then(async turmas => {
-                if(!turmas.length){
-                    resp.status(204).json()
-                    return;
-                }
-
-                const turmasRetorno = []
-
-                for(let turma of turmas){
-                    try{
-                        const disciplinas = await DisciplinaModel.find({ turmaId: turma._id }).exec()
-                    
-                        turmasRetorno.push({
-                            id: turma._id,
-                            codigo: turma.codigo,
-                            alunos: turma.alunos,
-                            disciplinas 
-                        })
-                    } catch(err){
-                        console.error("Erro tentando carregar as turmas", err)
-                    }
-                }
-
-                resp.status(200).json({ turmasRetorno })
-            })
-            .catch(err => resp.status(500).json(err))
+    constructor() {
+        this.turmaService = new TurmaService()
     }
 
-    static get(req, resp, next) {
+    async list(req, resp) {
 
-        const id  = req.params.id
+        try{
+            const turmas = await this.turmaService.listarTodas()
 
-        TurmaModel.findById(id).exec()
-            .then(turma => {
-                if(!turma){
-                    resp.status(204).json()
-                    return;
-                }
-                
-                DisciplinaModel.find({ turmaId: id })
-                    .exec()
-                    .then(disciplinas => {
-                        resp.status(200).json({ 
-                            turma: {
-                                id,
-                                codigo: turma.codigo,
-                                alunos: turma.alunos,
-                                disciplinas 
-                            } 
-                        })
-                    }).catch(err => {
-                        resp.status(500).json({ err })
-                    })
+            if(!turmas.length) {
+                resp.status(204).json()
+                return;
+            }
+
+            resp.status(200).json({
+                turmas: turmas.map(x => ({
+                    id: x._id,
+                    codigo: x.codigo,
+                    nome: x.nome
+                }))
             })
-            .catch(err => { 
-                resp.status(500).json({ err })
+        }catch(e){
+            console.log(e)
+            resp.status(500).json({
+                mensagem: "Falha ao tentar listar todas as turmas"
             })
+        }
+        
     }
 
-    static async create(req, resp, next) {
+    async get(req, resp) {
 
-        const turmaModel = new TurmaModel({
-            codigo: req.body.codigo,
-            alunos: req.body.alunos
-        })
-
-        turmaModel.save()
-            .then(async turmaResp => {
-                
-                const returnModel = { 
-                    id: turmaResp._id,
-                    codigo: turmaResp.codigo,
-                    alunos: turmaResp.alunos,
-                    disciplinas: [] 
+        try{
+            const turma = await this.turmaService.buscarPorId(req.params.id)
+            resp.status(200).json({
+                turma: {
+                    id: turma._id,
+                    codigo: turma.codigo,
+                    nome: turma.nome
                 }
-
-                for(let disciplina of req.body.disciplinas) {
-                    try{
-                        disciplina.turmaId = returnModel.id
-                        const disciplinaModel = new DisciplinaModel(disciplina)
-                        const disciplinaResp = await disciplinaModel.save()
-                        returnModel.disciplinas.push(disciplinaResp)
-                    }catch(error){
-                        console.error("Falha ao salvar disciplina", error)                        
-                    }
-                }
-                
-                resp.status(201).json({ returnModel })
             })
-            .catch(err => {
-                resp.status(500).json(err)   
+        }catch(e) {
+            console.log(e)
+            resp.status(500).json({
+                mensagem: "Falha ao tentar carregar Turma"
             })
+        }
+        
     }
 
-    static update(req, resp, next) {
+    async create(req, resp) {
+
+
+        try{
+            const turma = await this.turmaService.inserir(req.body)
+
+            resp.status(201).json({
+                turma: {
+                    id: turma._id,
+                    codigo: turma.codigo,
+                    nome: turma.nome
+                }
+            })
+        }catch(e){
+            console.log(e)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar inserir turmar"
+            })
+        }
+
+    }
+
+    static update(req, resp) {
 
         const reqBody = req.body
 
