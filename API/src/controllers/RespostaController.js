@@ -8,9 +8,14 @@ import QuestaoRespostaModel from "../model/QuestaoResposta.js"
 import QuestaoMultiplaRespostaModel from "../model/QuestaoMultiplaResposta.js"
 import QuestaoEscritaRespostaModel from "../model/QuestaoEscritaResposta.js"
 import QuestaoParesRespostaModel from "../model/QuestaoParesResposta.js"
+import RespostaService from "../services/RespostaService.js"
 
 
 export default class RespostaController {
+
+    constructor(){
+        this.respostaService = new RespostaService()
+    }
 
     static async create(req, resp) {
 
@@ -19,7 +24,7 @@ export default class RespostaController {
             const respostaAluno = await 
                 new RespostaAlunoModel({
                     tarefa: req.body.tarefaId,
-                    aluno: req.user._id,
+                    aluno: req.id,
                     dataResposta: new Date()
                 }).save()
 
@@ -39,70 +44,22 @@ export default class RespostaController {
 
     }
 
-    static async createRespostaQuestao(req, resp) {
-        const obj = {
-            respostaId: req.body.respostaId,
-            questao: req.body.questao,
-            respondido: req.body.respondido
-        }
-        // console.log(obj.questao)
-        const questao = await QuestaoModel.findById(obj.questao)
-        // console.log(questao)
-        
-        const questaoResposta = {
-            resposta: obj.respostaId,
-            questao: questao._id
-        }
+    async createRespostaQuestao(req, resp) {
 
-        let questaoRespostaModel
-        RespostaController.estaCorreta(obj.respostaId, obj.questao)
-        return;
-        if (questao instanceof QuestaoMultiplaModel){
-            questaoRespostaModel = new QuestaoMultiplaRespostaModel({
-                ...questaoResposta,
-                alternativa: obj.respondido
-            })
-        } else if (questao instanceof QuestaoEscritaModel) {
-            questaoRespostaModel = new QuestaoEscritaRespostaModel({
-                ...questaoResposta,
-                respostaQuestao: obj.respondido
-            })
-        } else if (questao instanceof QuestaoParesModel) {
-            questaoRespostaModel = new QuestaoParesRespostaModel({
-                ...questaoResposta,
-                pares: obj.respondido
+        try{
+            const resposta = await this.respostaService.responderQuestao(
+                req.body.respostaId, 
+                req.body.questao, 
+                req.body.respondido)
+
+            resp.status(201).json(resposta)
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                message: "Erro ao tentar responder questao"
             })
         }
-
-        await questaoRespostaModel.save()
-
-        resp.status(204).send()
-    }
-
-    static async estaCorreta(respostaId, questaoId, questaoRespostaAluno) {
-        const respostaAluno = await RespostaAlunoModel.findById(respostaId)
-        const respostaTarefa = await RespostaModel.findOne({
-            kind: null,
-            tarefa: respostaAluno.tarefa
-        })
-        
-        const questoes = await Promise.all(respostaTarefa.questoes.map(async questaoId => await QuestaoRespostaModel.findById(questaoId)))
-        
-        const questaoGabarito = questoes.filter(q => q.questao == questaoId)
-
-        if (questaoGabarito instanceof QuestaoMultiplaRespostaModel){
-            return questaoGabarito.alternativa == respostaAluno.alternativa
-        } else if (questaoGabarito instanceof QuestaoEscritaRespostaModel) {
-            questaoGabarito.respostaQuestao
-
-
-        } else if (questaoGabarito instanceof QuestaoParesRespostaModel) {
-            questaoRespostaModel = new QuestaoParesRespostaModel({
-                ...questaoResposta,
-                pares: obj.respondido
-            })
-        }
-
+    
     }
 
 }

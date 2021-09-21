@@ -78,12 +78,15 @@ export default class TarefaController {
 
         try{
             await tarefaModel.save()
+
             for(let questao of tarefaModel.questoes){
+                questao.tarefaId = tarefaModel._id
                 await questao.save()
             }
 
             await respostaModel.save()
             for(let questao of respostaModel.questoes){
+                questao.resposta = respostaModel._id
                 await questao.save()
             }
 
