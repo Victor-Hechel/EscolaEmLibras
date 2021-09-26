@@ -1,16 +1,16 @@
 import React, { createContext, useState } from 'react'
+import jwtDecode from 'jwt-decode'
 
 const AutenticacaoContext = createContext({})
 
 export const AutenticacaoProvider = ({ children }) => {
 
-    const [token, setToken] = useState("")
+    const [token, setToken] = useState(localStorage.getItem("token"))
 
     function Logar(tokenParam) {
-        console.log("Olha o token no contexto aqui: ", tokenParam)
-    
         setToken(tokenParam)
-    
+        localStorage.setItem("token", tokenParam)
+        localStorage.setItem("user", JSON.stringify(jwtDecode(tokenParam).usuario))
     }
 
     return (

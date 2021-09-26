@@ -10,6 +10,7 @@ class Login extends React.Component {
         this.state = {
             login: '',
             senha: '',
+            erro: '',
             inputDisabled: false
         }
 
@@ -32,26 +33,27 @@ class Login extends React.Component {
                 senha: this.state.senha
             })
         }
-        console.log(Login.contextType)
 
         const response = await fetch('http://www.localhost:3002/login', requestOptions)
 
+        let erroMensagem
+
         if(response.status === 404) {
-            console.log("Usuário não existe")
+            erroMensagem = "Usuário não existe"
         }else if(response.status === 401) {
-            console.log("Senha inválida")
+            erroMensagem = "Senha inválida"
         }else if(response.status === 500) {
-            console.log("Erro inesperado")
+            erroMensagem = "Erro inesperado"
         }else{
             const responseBody = await response.json()
-            console.log("Tudo certo, seu token eh: ", responseBody)
             this.context.Logar(responseBody.accessToken)
+            return
         }
 
         this.setState({
-            inputDisabled: false
-          });
-
+            inputDisabled: false,
+            erro: erroMensagem
+        });
     }
 
     handleInputChange(event) {
@@ -70,6 +72,14 @@ class Login extends React.Component {
                 <main className="form-signin">
                     <form onSubmit={this.handleSubmit}>
                         <h1 className="h3 mb-3 fw-normal">Escola em Libras</h1>
+                        
+                        {
+                            this.state.erro && 
+                            <div className="alert alert-danger" role="alert">
+                                {this.state.erro}
+                            </div>
+                        }
+
                         <div className="form-floating">
                             <input type="email" name="login" className="form-control" id="floatingInput" placeholder="name@example.com" value={this.state.login} onChange={this.handleInputChange}/>
                             <label htmlFor="floatingInput">Email</label>
