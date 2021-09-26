@@ -4,6 +4,7 @@ import fileUpload from 'express-fileupload'
 import MediaEntry from "./model/MediaEntry.js"
 import { unlink } from 'fs/promises';
 import cron from 'node-cron';
+import cors from 'cors'
 
 import Mongoose from 'mongoose'
 
@@ -11,7 +12,16 @@ Mongoose.connect('mongodb://localhost:27017/escolaemlibras', {useNewUrlParser: t
 Mongoose.set('useFindAndModify', false);
 
 const app = express()
-const port = 3000
+const port = 3002
+
+app.options('*', cors())
+app.use((req, resp, next) => {
+    resp.header("Access-Control-Allow-Origin", "*")
+    resp.header("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS, PUT")
+    resp.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+    app.use(cors())
+    next()
+})
 
 app.use(urlencoded({ extended: false }))
 app.use(json())
