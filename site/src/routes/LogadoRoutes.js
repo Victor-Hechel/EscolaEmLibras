@@ -9,7 +9,7 @@ const LogadoRoutes = () => {
     return (
         <BrowserRouter>
             <Route path="/" exact component={AreaLogada} />
-            <Route path="/professores" component={Lista} />
+            <Route path="/professores" exact component={Lista} />
             <Route path="/professores/salvar" component={ProfessorForm} />
         </BrowserRouter>
     )
