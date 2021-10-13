@@ -11,7 +11,9 @@ const AreaLogada = () => {
                 </Link>
             </div>
             <div>
-                <button className="w-50 btn btn-lg btn-primary">Lista alunos</button>
+                <Link to="/alunos">
+                    <button className="w-50 btn btn-lg btn-primary">Lista alunos</button>
+                </Link>
             </div>
             <div>
                 <button className="w-50 btn btn-lg btn-primary">Lista turmas</button>

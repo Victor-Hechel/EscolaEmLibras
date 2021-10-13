@@ -6,13 +6,13 @@ import TituloPainel from './TituloPainel'
 
 const Lista = (props) => {
 
-    const [ professores, setProfessores ] = useState([])
+    const [ alunos, setAlunos ] = useState([])
 
     const { token } = useContext(AutenticacaoContext)
 
     useEffect(() => {
-        const listarProfessores = async () => {
-            const response = await fetch('http://www.localhost:3002/professor', {
+        const listarAlunos = async () => {
+            const response = await fetch('http://www.localhost:3002/aluno', {
                 method: 'GET',
                 headers: { 
                     'Content-Type': 'application/json', 
@@ -22,11 +22,11 @@ const Lista = (props) => {
     
             if(response.status === 200) {
                 const responseBody = await response.json()
-                setProfessores(responseBody.professores)
+                setAlunos(responseBody.alunos)
             }
         }
     
-        listarProfessores()
+        listarAlunos()
     }, [token])
     
 
@@ -42,7 +42,7 @@ const Lista = (props) => {
                                 <tr>
                                     <th>
                                         <span>Nome</span>
-                                        <Link to="/professores/salvar">
+                                        <Link to="/alunos/salvar">
                                             <button className="btn btn-sm btn-primary">Adicionar</button>
                                         </Link>
                                     </th>
@@ -51,12 +51,12 @@ const Lista = (props) => {
                             <tbody>
                             
                         {
-                            professores && 
-                            professores.map((professor, index) => (
+                            alunos && 
+                            alunos.map((aluno, index) => (
                                 <tr>
                                     <td key={index}>
-                                        <span>{professor.nome}</span>
-                                        <Link to={'/professores/salvar/'+professor.id}>
+                                        <span>{aluno.nome}</span>
+                                        <Link to={'/alunos/salvar/'+aluno.id}>
                                             <button className="btn btn-sm btn-primary">Editar</button>
                                         </Link>
                                     </td>

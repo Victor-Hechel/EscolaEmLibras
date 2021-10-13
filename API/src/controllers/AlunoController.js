@@ -52,7 +52,8 @@ export default class AlunoController {
                 aluno: {
                     id: aluno._id,
                     nome: aluno.nome,
-                    dataNascimento: aluno.dataNascimento,
+                    cpf: aluno.cpf,
+                    dataNascimento: aluno.dataNascimento.toISOString().split('T')[0],
                     email: aluno.email,
                     genero: aluno.genero,
                     pontos: aluno.pontos,
@@ -116,9 +117,6 @@ export default class AlunoController {
             aluno.genero = alunoBody.genero
             aluno.tipo = alunoBody.tipo
             aluno.pontos = alunoBody.pontos
-            aluno.password = createHmac('sha256', secret)
-                .update(alunoBody.senha)
-                .digest('hex')        
 
             await this.alunoService.atualizar(aluno)
 
