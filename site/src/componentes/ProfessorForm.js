@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import AutenticacaoContext from '../contextos/autenticacao'
+import Header from './Header'
+import TituloPainel from './TituloPainel'
 
 const ProfessorForm = (props) => {
 
@@ -10,76 +12,151 @@ const ProfessorForm = (props) => {
     const [ genero, setGenero ] = useState("")
     const [ senha, setSenha ] = useState("")
     const [ inputDisabled, setInputDisabled] = useState(false)
+    const [ erro, setErro ] = useState("")
+    const [ id ] = useState(props.match.params.id)
+
 
     const { token } = useContext(AutenticacaoContext)
 
+    useEffect(() => {
+        const carregarProfessor = async () => {
+            const response = await fetch(`http://www.localhost:3002/professor/${id}`, {
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+    
+            if(response.status === 200) {
+                const responseBody = await response.json()
+                console.log(responseBody)
+                setNome(responseBody.professor.nome)
+                setDataNascimento(responseBody.professor.dataNascimento)
+                setCpf(responseBody.professor.cpf)
+                setEmail(responseBody.professor.email)
+                setGenero(responseBody.professor.genero)
+            }
+        }
+    
+        carregarProfessor()
+    }, [token, id])
 
     function HandleSubmit(e){
         e.preventDefault()
         setInputDisabled(true)
-        fetch('http://www.localhost:3002/professor', {
-            method: 'POST',
+        const reqBody = {
+            cpf,
+            nome,
+            dataNascimento,
+            email,
+            genero
+        }
+
+        if(!id){
+            reqBody.senha = senha
+        }else{
+            reqBody.id = id
+        }
+            
+
+        fetch(`http://www.localhost:3002/professor`, {
+            method: id ? 'PUT' : 'POST',
             headers: { 
                 'Content-Type': 'application/json', 
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({
-                cpf,
-                nome,
-                dataNascimento,
-                email,
-                genero,
-                senha
-            })
-        }).then(x => {
-            console.log(x)
-            props.history.push("/professores")
+            body: JSON.stringify(reqBody)
+        }).then(async x => {
+            if(x.status === 201)
+                props.history.push("/professores")
+            else{
+                const respBody = await x.json()
+                setErro(respBody.mensagem)
+            }
+                    
         }).catch(e => {
-            console.log(e)
+            setErro("Ocorreu um problema ao tentar salvar o professor")
         }).finally(() => setInputDisabled(false))
         
     }
 
     return (
-        <div className="container text-center">
-            <main className="form-signin">
-                <form onSubmit={HandleSubmit}>
-                    <h1 className="h3 mb-3 fw-normal">Cadastro Professor</h1>
+        <>
+            <Header />
+            <main className="container main-panel">
+                <div class="form-container"> 
+                    <form onSubmit={HandleSubmit}>
 
-                    <div className="form-floating">
-                        <input type="text" name="nome" className="form-control" id="nome" 
-                            value={nome} onChange={e => setNome(e.target.value)}/>
-                        <label htmlFor="nome">Nome</label>
-                    </div>
-                    <div className="form-floating">
-                        <input type="text" name="cpf" className="form-control" id="cpf" 
-                            value={cpf} onChange={e => setCpf(e.target.value)} />
-                        <label htmlFor="cpf">Cpf</label>
-                    </div>
-                    <div className="form-floating">
-                        <input type="date" name="dataNascimento" className="form-control" id="dataNascimento" 
-                            value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} />
-                        <label htmlFor="dataNascimento">Data de Nascimento</label>
-                    </div>
-                    <div className="form-floating">
-                        <input type="email" name="email" className="form-control" id="email" 
-                            value={email} onChange={e => setEmail(e.target.value)} />
-                        <label htmlFor="email">Email</label>
-                    </div>
-                    <div className="form-floating">
-                        <input type="text" name="genero" className="form-control" id="genero" 
-                            value={genero} onChange={e => setGenero(e.target.value)} />
-                        <label htmlFor="genero">Gênero</label>
-                    </div>
-                    <div className="form-floating">
-                        <input type="password" name="senha" className="form-control" id="senha" 
-                            value={senha} onChange={e => setSenha(e.target.value)} />
-                        <label htmlFor="senha">Senha</label>
-                    </div>
-                    <button className="w-100 btn btn-lg btn-primary" type="submit" disabled={inputDisabled ? "disabled": ""}>Salvar</button>
-                </form>
+                        <TituloPainel titulo="Cadastro Professor" history={props.history} />
+                        {
+                            erro && 
+                            <div className="alert alert-danger" role="alert">
+                                {erro}
+                            </div>
+                        }
+
+                        <div className="row">
+                            <div className="col">
+                                <label htmlFor="nome" className="form-label">Nome</label>
+                                <input type="text" name="nome" className="form-control" id="nome" 
+                                    value={nome} onChange={e => setNome(e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-md">
+                                <label htmlFor="cpf" className="form-label">CPF</label>
+                                <input type="text" name="cpf" className="form-control" id="cpf" 
+                                    value={cpf} onChange={e => setCpf(e.target.value)} />
+                            </div>
+
+                            <div className="col-md">
+                                <label htmlFor="dataNascimento" className="form-label">Data de Nascimento</label>
+                                <input type="date" name="dataNascimento" className="form-control" id="dataNascimento" 
+                                    value={dataNascimento} onChange={e => setDataNascimento(e.target.value)} />
+                            </div>
+
+                            <div className="col-md">
+                                <label htmlFor="genero" className="form-label">Gênero</label>
+                                <select name="genero" id="genero" className="form-control" 
+                                    value={genero} onChange={e => setGenero(e.target.value)}>
+                                    <option>Selecione</option>
+                                    <option value="f">Feminino</option>
+                                    <option value="m">Masculino</option>
+                                    <option value="o">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col">
+                                <label htmlFor="email" className="form-label">Email</label>
+                                <input type="email" name="email" className="form-control" id="email" 
+                                    value={email} onChange={e => setEmail(e.target.value)} />
+                            </div>
+                        </div>
+
+                        {
+                            !id &&
+                            <div className="row">
+                                <div className="col">
+                                    <label htmlFor="senha" className="form-label">Senha</label>
+                                    <input type="password" name="senha" className="form-control" id="senha" 
+                                        value={senha} onChange={e => setSenha(e.target.value)} />
+                                </div>
+                            </div>
+                            
+                        }
+                        <div className="row">
+                            <div className="col">
+                                <button className="w-100 btn btn-lg btn-primary" type="submit" disabled={inputDisabled ? "disabled": ""}>Salvar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </main>
-        </div>
+        </>
     )
 }
 

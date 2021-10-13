@@ -10,7 +10,7 @@ const LogadoRoutes = () => {
         <BrowserRouter>
             <Route path="/" exact component={AreaLogada} />
             <Route path="/professores" exact component={Lista} />
-            <Route path="/professores/salvar" component={ProfessorForm} />
+            <Route path="/professores/salvar/:id?" component={ProfessorForm} />
         </BrowserRouter>
     )
 }

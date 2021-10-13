@@ -8,32 +8,131 @@ body {
 }
 
 body {
-  display: flex;
+  /* display: flex;
   align-items: center;
   padding-top: 40px;
-  padding-bottom: 40px;
+  padding-bottom: 40px; */
   background-color: #4abaaf !important;
 }
 
-.form-signin {
+/* .form-signin {
   width: 100%;
   max-width: 330px;
   padding: 15px;
   margin: auto;
-}
+} */
 
 .form-signin .form-floating:focus-within {
   z-index: 2;
 }
 
-.form-signin input {
+/* .form-signin input {
   margin-bottom: 10px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-}
+} */
 
-.form-signin input[type="password"] {
+/* .form-signin input[type="password"] {
   margin-bottom: 50px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+} */
+
+.main-panel {
+  background-color: lightblue;
+  padding: 20px;
+}
+ 
+.form-container {
+  max-width: 700px;
+  margin: auto;
+}
+
+form .row+.row{
+  margin-top: 1em;
+}
+
+td.action {
+  width: 1px;
+  white-space:nowrap;
+}
+
+header {
+  background-color: lightblue;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 60px;
+  padding: 5px;
+}
+
+header img, i {
+  height: 100%;
+}
+
+#logo {
+  margin-left: 3%;
+}
+
+.right-content{
+  position: absolute;
+  display: inline;
+  height: 100%;
+  right: 3%;
+  top: 0;
+}
+
+#logout-icon{
+  font-size: 35px;
+}
+
+header * {
+  display: inline-block;
+  vertical-align: top;
+}
+
+header h1 {
+  font-size: 25px;
+  margin-left: 10px;
+  vertical-align: text-top;
+}
+
+.form-container h1{
+  text-align: center;
+  vertical-align: bottom;
+}
+
+#voltar {
+  position: absolute;
+  display: inline;
+  width: auto;
+  text-align: center;
+  margin-left: calc(var(--bs-gutter-x) * .5);
+}
+
+#lista thead {
+  background-color: #cccccc;
+}
+
+#lista tbody {
+  background-color: #f8f9fa;
+}
+
+#lista {
+  border: 1px solid #3f3f3f;
+}
+
+#lista button {
+  float: right;
+}
+
+#lista td,th {
+  vertical-align: middle;
+}
+
+#lista tbody button {
+  display: none;
+}
+
+#lista tbody tr:hover button {
+  display: block;
 }

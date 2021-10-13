@@ -12,7 +12,7 @@ export default class ProfessorController {
         this.professorService = new ProfessorService()
     }
 
-    async list(req, resp, next) {
+    async list(req, resp) {
 
         try{
             const professores = await this.professorService.listarTodos()
@@ -21,7 +21,7 @@ export default class ProfessorController {
                 professores: professores.map(x => ({
                     id: x._id,
                     nome: x.nome,
-                    dataNascimento: x.dataNascimento,
+                    dataNascimento: x.dataNascimento.toISOString().split('T')[0],
                     email: x.email,
                     genero: x.genero,
                     desabilitado: x.disabled
@@ -36,7 +36,7 @@ export default class ProfessorController {
 
     }
 
-    async get(req, resp, next) {
+    async get(req, resp) {
 
         const id = req.params.id
 
@@ -52,7 +52,8 @@ export default class ProfessorController {
                 professor: {
                     id: professor._id,
                     nome: professor.nome,
-                    dataNascimento: professor.dataNascimento,
+                    cpf: professor.cpf,
+                    dataNascimento: professor.dataNascimento.toISOString().split('T')[0],
                     email: professor.email,
                     genero: professor.genero,
                     desabilitado: professor.disabled
@@ -68,7 +69,7 @@ export default class ProfessorController {
         
     }
 
-    async create(req, resp, next) {
+    async create(req, resp) {
 
         const professorBody = req.body
         professorBody.password = createHmac('sha256', secret)
@@ -84,7 +85,7 @@ export default class ProfessorController {
                     nome: professor.nome,
                     dataNascimento: professor.dataNascimento,
                     email: professor.email,
-                    genero: professor.genero,
+                    genero: professor.genero
                 }
             })
         }catch(err){
@@ -113,15 +114,13 @@ export default class ProfessorController {
             professor.email = professorBody.email
             professor.genero = professorBody.genero
             professor.tipo = professorBody.tipo
-            professor.password = createHmac('sha256', secret)
-                .update(professorBody.senha)
-                .digest('hex')        
 
             await this.professorService.atualizar(professor)
 
             resp.status(201).json({
                 professor: {
                     id: professor._id,
+                    cpf: professor.cpf,
                     nome: professor.nome,
                     dataNascimento: professor.dataNascimento,
                     email: professor.email,
@@ -137,7 +136,7 @@ export default class ProfessorController {
         
     }
 
-    async disable(req, resp, next) {
+    async disable(req, resp) {
 
         const id  = req.params.id
 
