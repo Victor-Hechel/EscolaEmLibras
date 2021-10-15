@@ -7,7 +7,7 @@ const Header = () => {
             <h1>Escola em Libras</h1>
     
             <div className="right-content">
-                <i id="logout-icon" class="bi bi-box-arrow-right"></i>
+                <i id="logout-icon" className="bi bi-box-arrow-right"></i>
             </div>
         </header>
     )

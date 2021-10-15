@@ -4,15 +4,15 @@ import AutenticacaoContext from '../contextos/autenticacao'
 import Header from './Header'
 import TituloPainel from './TituloPainel'
 
-const Lista = (props) => {
+const TurmaLista = (props) => {
 
-    const [ alunos, setAlunos ] = useState([])
+    const [ turmas, setTurmas ] = useState([])
 
     const { token } = useContext(AutenticacaoContext)
 
     useEffect(() => {
-        const listarAlunos = async () => {
-            const response = await fetch('http://www.localhost:3002/aluno', {
+        const listarTurmas = async () => {
+            const response = await fetch('http://www.localhost:3002/turma', {
                 method: 'GET',
                 headers: { 
                     'Content-Type': 'application/json', 
@@ -22,11 +22,11 @@ const Lista = (props) => {
     
             if(response.status === 200) {
                 const responseBody = await response.json()
-                setAlunos(responseBody.alunos)
+                setTurmas(responseBody.turmas)
             }
         }
     
-        listarAlunos()
+        listarTurmas()
     }, [token])
     
 
@@ -42,7 +42,7 @@ const Lista = (props) => {
                                 <tr>
                                     <th>
                                         <span>Nome</span>
-                                        <Link to="/alunos/salvar">
+                                        <Link to="/turmas/salvar">
                                             <button className="btn btn-sm btn-primary">Adicionar</button>
                                         </Link>
                                     </th>
@@ -51,12 +51,12 @@ const Lista = (props) => {
                             <tbody>
                             
                         {
-                            alunos && 
-                            alunos.map((aluno, index) => (
+                            turmas && 
+                            turmas.map((turma, index) => (
                                 <tr key={index}>
                                     <td>
-                                        <span>{aluno.nome}</span>
-                                        <Link to={'/alunos/salvar/'+aluno.id}>
+                                        <span>{turma.codigo}</span>
+                                        <Link to={'/turmas/salvar/'+turma.id}>
                                             <button className="btn btn-sm btn-primary">Editar</button>
                                         </Link>
                                     </td>
@@ -73,4 +73,4 @@ const Lista = (props) => {
     )
 } 
 
-export default Lista
+export default TurmaLista
