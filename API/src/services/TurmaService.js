@@ -1,10 +1,12 @@
 import TurmaModel from "../model/Turma.js";
 import DisciplinaService from "./DisciplinaService.js";
+import AlunoService from "./AlunoService.js";
 
 export default class TurmaService {
 
     constructor(){
         this.disciplinaService = new DisciplinaService()
+        this.alunoService = new AlunoService()
     }
 
     async inserir(reqBody) {
@@ -36,9 +38,10 @@ export default class TurmaService {
         if(!turma){
             return null
         }
-
-        turma.disciplinas = Promise.all(turma.disciplinas.map(async x => await DisciplinaModel.findById(x)))
-
+        
+        turma.disciplinas = await Promise.all(turma.disciplinas.map(async x => await this.disciplinaService.buscarPorId(x)))
+        
+        turma.alunos = await Promise.all(turma.alunos.map(async x => await this.alunoService.buscarPorId(x)))
         return turma
     }
                 

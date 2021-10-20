@@ -6,4 +6,8 @@ export default class DisciplinaService {
         const disciplinaModel = new DisciplinaModel(disciplina)
         return await disciplinaModel.save()
     }
+
+    async buscarPorId(id) {
+        return await DisciplinaModel.findById(id)
+    }
 }

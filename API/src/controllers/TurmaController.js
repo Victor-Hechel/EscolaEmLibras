@@ -38,11 +38,21 @@ export default class TurmaController {
 
         try{
             const turma = await this.turmaService.buscarPorId(req.params.id)
+
             resp.status(200).json({
                 turma: {
                     id: turma._id,
                     codigo: turma.codigo,
-                    nome: turma.nome
+                    nome: turma.nome,
+                    disciplinas: turma.disciplinas.map(x => ({ 
+                        id: x.id, 
+                        nome: x.nome, 
+                        professorId: x.professorId 
+                    })),
+                    alunos: turma.alunos.map(x => ({ 
+                        id: x.id, 
+                        nome: x.nome 
+                    }))
                 }
             })
         }catch(e) {
