@@ -121,7 +121,7 @@ header h1 {
   border: 1px solid #3f3f3f;
 }
 
-#lista button {
+#lista .invisible-button {
   float: right;
 }
 
@@ -129,10 +129,26 @@ header h1 {
   vertical-align: middle;
 }
 
-#lista tbody button {
+#lista tbody .invisible-button {
   display: none;
 }
 
-#lista tbody tr:hover button {
+#lista tbody tr:hover .invisible-button {
   display: block;
+}
+
+.align-right {
+  float: right;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.table-no-padding tbody td{
+  padding: 0;
+}
+
+.table-no-padding tbody input, select {
+  border-radius: 0;
 }

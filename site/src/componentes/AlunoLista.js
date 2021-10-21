@@ -43,7 +43,7 @@ const Lista = (props) => {
                                     <th>
                                         <span>Nome</span>
                                         <Link to="/alunos/salvar">
-                                            <button className="btn btn-sm btn-primary">Adicionar</button>
+                                            <button className="btn btn-sm btn-primary align-right">Adicionar</button>
                                         </Link>
                                     </th>
                                 </tr>
@@ -57,7 +57,7 @@ const Lista = (props) => {
                                     <td>
                                         <span>{aluno.nome}</span>
                                         <Link to={'/alunos/salvar/'+aluno.id}>
-                                            <button className="btn btn-sm btn-primary">Editar</button>
+                                            <button className="btn btn-sm btn-primary invisible-button">Editar</button>
                                         </Link>
                                     </td>
                                 </tr>

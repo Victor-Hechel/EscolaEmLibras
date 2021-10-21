@@ -7,6 +7,7 @@ import ProfessorLista from '../componentes/ProfessorLista'
 import AlunoForm from '../componentes/AlunoForm'
 import AlunoLista from '../componentes/AlunoLista'
 import TurmaLista from '../componentes/TurmaLista'
+import TurmaForm from '../componentes/TurmaForm'
 
 const LogadoRoutes = () => {
     return (
@@ -17,6 +18,7 @@ const LogadoRoutes = () => {
             <Route path="/alunos" exact component={AlunoLista} />
             <Route path="/alunos/salvar/:id?" component={AlunoForm} />
             <Route path="/turmas" exact component={TurmaLista} />
+            <Route path="/turmas/salvar/:id?" component={TurmaForm} />
         </BrowserRouter>
     )
 }

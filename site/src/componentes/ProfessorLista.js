@@ -43,7 +43,7 @@ const ProfessorLista = (props) => {
                                     <th>
                                         <span>Nome</span>
                                         <Link to="/professores/salvar">
-                                            <button className="btn btn-sm btn-primary">Adicionar</button>
+                                            <button className="btn btn-sm btn-primary align-right">Adicionar</button>
                                         </Link>
                                     </th>
                                 </tr>
@@ -57,7 +57,7 @@ const ProfessorLista = (props) => {
                                     <td>
                                         <span>{professor.nome}</span>
                                         <Link to={'/professores/salvar/'+professor.id}>
-                                            <button className="btn btn-sm btn-primary">Editar</button>
+                                            <button className="btn btn-sm btn-primary invisible-button">Editar</button>
                                         </Link>
                                     </td>
                                 </tr>

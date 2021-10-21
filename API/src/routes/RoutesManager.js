@@ -57,7 +57,7 @@ export default class RoutesManager {
     initializeTurma(){
         const router = TurmaRoutes.initializeRoutes(Router())
         this.app.use('/turma', 
-            //Authentication.authentication, 
+            Authentication.authentication, 
             router)
     }
 

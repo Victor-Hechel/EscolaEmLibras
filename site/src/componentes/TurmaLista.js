@@ -43,7 +43,7 @@ const TurmaLista = (props) => {
                                     <th>
                                         <span>Nome</span>
                                         <Link to="/turmas/salvar">
-                                            <button className="btn btn-sm btn-primary">Adicionar</button>
+                                            <button className="btn btn-sm btn-primary align-right">Adicionar</button>
                                         </Link>
                                     </th>
                                 </tr>
@@ -57,7 +57,7 @@ const TurmaLista = (props) => {
                                     <td>
                                         <span>{turma.codigo}</span>
                                         <Link to={'/turmas/salvar/'+turma.id}>
-                                            <button className="btn btn-sm btn-primary">Editar</button>
+                                            <button className="btn btn-sm btn-primary invisible-button align-right">Editar</button>
                                         </Link>
                                     </td>
                                 </tr>
