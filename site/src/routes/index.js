@@ -7,7 +7,7 @@ import AutenticacaoContext from '../contextos/autenticacao'
 const Routes = () => {
 
     const { token } = useContext(AutenticacaoContext)
-    
+
     return (
         token ?  <LogadoRoutes/> : <DeslogadoRoutes />
     )
