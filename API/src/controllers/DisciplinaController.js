@@ -6,6 +6,32 @@ export default class DisciplinaController {
         this.disciplinaService = new DisciplinaService()
     }
 
+    async carregar(req, resp) {
+        try{
+
+            const disciplina = await this.disciplinaService.buscarPorId(req.params.id)
+
+            if(!disciplina){
+                resp.status(204).send()
+                return
+            }
+
+            resp.status(200).json({
+                disciplina: {
+                    id: disciplina._id,
+                    nome: disciplina.nome
+                }
+            })
+
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Falha ao tentar carregar a disciplina"
+            })
+        }
+
+    }
+
     async list(req, resp){
         try{
 
