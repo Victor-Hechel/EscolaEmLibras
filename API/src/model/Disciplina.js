@@ -3,8 +3,8 @@ const { Schema, model } = mongoose
 
 const disciplinaSchema = new Schema({
     nome: String,
-    professorId: mongoose.Types.ObjectId,
-    turmaId: mongoose.Types.ObjectId
+    professor: { type: mongoose.Types.ObjectId, ref: "Professor" },
+    turma: { type: mongoose.Types.ObjectId, ref: "Turma" }
 })
 
 const DisciplinaModel = model('Disciplina', disciplinaSchema)

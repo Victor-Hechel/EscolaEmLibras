@@ -10,6 +10,7 @@ export default class TurmaService {
     }
 
     async inserir(reqBody) {
+
         const turmaModel = new TurmaModel({
             codigo: reqBody.codigo,
             alunos: reqBody.alunos,
@@ -18,7 +19,7 @@ export default class TurmaService {
 
         for(let disciplina of reqBody.disciplinas) {
 
-            disciplina.turmaId = turmaModel._id
+            disciplina.turma = turmaModel._id
             const disciplinaModel = await this.disciplinaService.inserir(disciplina)
             turmaModel.disciplinas.push(disciplinaModel)
             
@@ -27,7 +28,7 @@ export default class TurmaService {
         return await turmaModel.save()
     }
 
-    async listarTodas() {
+    async listar() {
         return await TurmaModel.find({})
     }
 

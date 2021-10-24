@@ -116,7 +116,7 @@ const TurmaForm = (props) => {
     }
 
     function adicionarDisciplina() {
-        setDisciplinas([...disciplinas, { nome: "", professorId: "" }])
+        setDisciplinas([...disciplinas, { nome: "", professor: "" }])
     }
 
     function removerAluno(i) {
@@ -127,7 +127,7 @@ const TurmaForm = (props) => {
 
     function alterarProfessor(e, index) {
         const disciplinasCopia = disciplinas.slice()
-        disciplinasCopia[index].professorId = e.target.value
+        disciplinasCopia[index].professor = e.target.value
         setDisciplinas(disciplinasCopia)
     }
 
@@ -235,7 +235,7 @@ const TurmaForm = (props) => {
                                                 <input type="text" className="form-control" value={disciplina.nome} placeholder="Matéria..." onChange={e => alterarDisciplina(e, index)} />
                                             </td>
                                             <td>
-                                                <select value={disciplina.professorId} className="form-control" onChange={e => alterarProfessor(e, index)}>
+                                                <select value={disciplina.professor} className="form-control" onChange={e => alterarProfessor(e, index)}>
                                                     <option value="">Selecione</option>
                                                 { 
                                                     professoresSelect && 

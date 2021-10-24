@@ -8,6 +8,7 @@ import TurmaRoutes from "./TurmaRoutes.js"
 import TarefaRoutes from "./TarefaRoutes.js"
 import MediaRoutes from "./MediaRoutes.js"
 import RespostaRoutes from "./RespostaRoutes.js"
+import DisciplinaRoutes from "./DisciplinaRoutes.js"
 
 export default class RoutesManager {
 
@@ -24,6 +25,7 @@ export default class RoutesManager {
         this.initializeTarefa()
         this.initializeMedia()
         this.initializeResposta()
+        this.initializeDisciplina()
     }
 
     initializeRoot(){
@@ -83,5 +85,13 @@ export default class RoutesManager {
             Authentication.authentication,
             Authentication.authorization(["Aluno"]),
             router)    
+    }
+
+    initializeDisciplina(){
+        const router = DisciplinaRoutes.initializeRoutes(Router())
+        this.app.use('/disciplina',
+            Authentication.authentication,
+            Authentication.authorization(["Admin", "Professor"]),
+            router)
     }
 }

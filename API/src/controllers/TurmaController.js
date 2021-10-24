@@ -11,7 +11,7 @@ export default class TurmaController {
     async list(req, resp) {
 
         try{
-            const turmas = await this.turmaService.listarTodas()
+            const turmas = await this.turmaService.listar()
 
             if(!turmas.length) {
                 resp.status(204).json()
@@ -47,7 +47,7 @@ export default class TurmaController {
                     disciplinas: turma.disciplinas.map(x => ({ 
                         id: x.id, 
                         nome: x.nome, 
-                        professorId: x.professorId 
+                        professor: x.professor 
                     })),
                     alunos: turma.alunos.map(x => ({ 
                         id: x.id, 
@@ -65,7 +65,6 @@ export default class TurmaController {
     }
 
     async create(req, resp) {
-
 
         try{
             const turma = await this.turmaService.inserir(req.body)
@@ -104,7 +103,7 @@ export default class TurmaController {
                     .then(async turmaResp => {
                         //deletar disciplinas que não fazem mais parte
                         try{
-                            const disciplinas = await DisciplinaModel.find({ turmaId: turma._id }).exec()
+                            const disciplinas = await DisciplinaModel.find({ turma: turma._id }).exec()
                             
                             const disciplinasAtuais = req.body.disciplinas.map(x => x.id)
 
@@ -125,7 +124,7 @@ export default class TurmaController {
                             // atualizar/cadastrar disciplinas atuais
                             for(let disciplina of req.body.disciplinas) {
                                 try{
-                                    disciplina.turmaId = returnModel.id
+                                    disciplina.turma = returnModel.id
                                     disciplina._id = disciplina.id
                                     
                                     var disciplinaResp;
