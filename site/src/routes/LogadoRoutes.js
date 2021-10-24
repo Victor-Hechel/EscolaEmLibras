@@ -7,7 +7,7 @@ import ProfessorRoutes from './ProfessorRoutes'
 const LogadoRoutes = () => {
 
     const { user } = useContext(AutenticacaoContext)
-    const kind = JSON.parse(user).kind.toLowerCase()
+    const kind = user.kind.toLowerCase()
 
     switch(kind){
         case 'admin': return (<AdminRoutes />);

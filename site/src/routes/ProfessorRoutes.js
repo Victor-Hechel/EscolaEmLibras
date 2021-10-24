@@ -1,13 +1,13 @@
 import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import Home from '../componentes/Professor/Home'
+import DisciplinaLista from '../componentes/Professor/DisciplinaLista'
 
 const ProfessorRoutes = () => {
 
     return (
         <BrowserRouter>
-            <Route path="/" exact component={Home} />
+            <Route path="/" exact component={DisciplinaLista} />
         </BrowserRouter>
     )
 }

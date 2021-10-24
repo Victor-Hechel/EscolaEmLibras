@@ -20,7 +20,7 @@ export const AutenticacaoProvider = ({ children }) => {
     }
 
     return (
-        <AutenticacaoContext.Provider value={{ signed: true, Logar, token, user }}>
+        <AutenticacaoContext.Provider value={{ signed: true, Logar, token, user: JSON.parse(user) }}>
             {children}
         </AutenticacaoContext.Provider>
     )

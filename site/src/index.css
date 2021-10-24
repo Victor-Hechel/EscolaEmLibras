@@ -152,3 +152,7 @@ header h1 {
 .table-no-padding tbody input, select {
   border-radius: 0;
 }
+
+.table-hover tbody tr:hover {
+  cursor: pointer;
+}
