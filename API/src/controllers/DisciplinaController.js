@@ -19,7 +19,8 @@ export default class DisciplinaController {
             resp.status(200).json({
                 disciplina: {
                     id: disciplina._id,
-                    nome: disciplina.nome
+                    nome: disciplina.nome,
+                    turma: disciplina.turma
                 }
             })
 

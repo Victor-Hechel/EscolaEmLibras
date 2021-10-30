@@ -156,3 +156,13 @@ header h1 {
 .table-hover tbody tr:hover {
   cursor: pointer;
 }
+
+#questao {
+  background-color: lightgray;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+#opcoes-admin .row{
+  margin-bottom: 10px;
+}
