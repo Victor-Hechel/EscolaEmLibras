@@ -9,7 +9,7 @@ const QuestaoEscritaForm = (props) => {
                     <label htmlFor="titulo" className="form-label">Título PT</label>
                     <div className="input-group">
                         <textarea name="titulo" className="form-control" id="titulo"
-                            value={props.questao.titulo} onChange={e => props.setObjectInArray(props.index, { titulo: e.target.value })} />
+                            value={props.questao.titulo} onChange={e => props.setAlteracoes(props.index, { titulo: e.target.value })} />
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@ const QuestaoEscritaForm = (props) => {
                     <label htmlFor="resposta" className="form-label">Resposta</label>
                     <div className="input-group">
                         <textarea name="resposta" className="form-control" id="resposta"
-                            value={props.questao.resposta} onChange={e => props.setObjectInArray(props.index, { resposta: e.target.value })} />
+                            value={props.questao.resposta} onChange={e => props.setAlteracoes(props.index, { resposta: e.target.value })} />
                     </div>
                 </div>
             </div>

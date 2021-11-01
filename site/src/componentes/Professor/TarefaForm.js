@@ -5,6 +5,7 @@ import Header from '../Header'
 import TituloPainel from '../TituloPainel'
 import QuestaoEscritaForm from './QuestaoEscritaForm'
 import QuestaoMultiplaForm from './QuestaoMultiplaForm'
+import QuestaoParesForm from './QuestaoParesForm'
 
 const TarefaForm = (props) => {
 
@@ -37,19 +38,28 @@ const TarefaForm = (props) => {
                     return {
                         enunciado: q.titulo,
                         midia: q.tituloMidia,
-                        tipo: "escrita",
+                        tipo: q.tipo,
                         resposta: q.resposta
                     }
                 else if(q.tipo === "multipla")
                     return {
                         enunciado: q.titulo,
                         midia: q.tituloMidia,
-                        tipo: "multipla",
+                        tipo: q.tipo,
                         alternativas: q.alternativas.map((alt, index) => ({
                             ...alt,
                             correta: index === parseInt(q.correta)
                         }))
                     }
+                else if(q.tipo === "pares")
+                    return {
+                        enunciado: q.titulo,
+                        midia: q.tituloMidia,
+                        tipo: q.tipo,
+                        colunaEsquerda: q.colunaEsquerda,
+                        colunaDireita: q.colunaDireita
+                    }    
+
                 return {}
             })
         }
@@ -93,6 +103,9 @@ const TarefaForm = (props) => {
         }else if(tipoSelecionado === "multipla") {
             novaQuestao.correta = 0
             novaQuestao.alternativas = [{ texto: "", midia: "" }]
+        }else if(tipoSelecionado === "pares") {
+            novaQuestao.colunaEsquerda = [{ texto: "", midia: "" }]
+            novaQuestao.colunaDireita = [{ texto: "", midia: "" }]
         }
 
         setQuestoes([...questoes, novaQuestao])
@@ -181,8 +194,15 @@ const TarefaForm = (props) => {
                                                 questao={questao}
                                                 setAlteracoes={setObjectInArray}
                                                 salvarAnexo={salvarAnexo} />
-                                        else
-                                            return <></>
+                                        else if (questao.tipo === "pares")
+                                            return <QuestaoParesForm 
+                                                key={index}
+                                                index={index} 
+                                                questao={questao}
+                                                setAlteracoes={setObjectInArray}
+                                                salvarAnexo={salvarAnexo} />
+
+                                        return <></>
                                     })
                                 }
 
