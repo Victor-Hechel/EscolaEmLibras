@@ -6,8 +6,13 @@ import QuestaoParesModel from "../model/QuestaoPares.js"
 import QuestaoEscritaRespostaModel from "../model/QuestaoEscritaResposta.js"
 import QuestaoMultiplaRespostaModel from "../model/QuestaoMultiplaResposta.js"
 import QuestaoParesRespostaModel from "../model/QuestaoParesResposta.js"
+import TarefaService from "../services/TarefaService.js"
 
 export default class TarefaController {
+
+    constructor() {
+        this.tarefaService = new TarefaService()
+    }
 
     static async create(req, resp) {
         
@@ -105,6 +110,23 @@ export default class TarefaController {
         }catch(err){
             console.log(err)
             resp.status(500).json("Falha ao tentar criar atividade")
+        }
+
+    }
+
+    async listar(req, resp) {
+
+        try{
+            const tarefas = await this.tarefaService.listar({
+                disciplinaId: req.query.disciplinaId
+            })
+
+            resp.status(200).json({ tarefas })
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                message: "Erro ao tentar listar tarefas"
+            })
         }
 
     }

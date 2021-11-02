@@ -30,6 +30,7 @@ const DisciplinaTurma = (props) => {
                 const responseBody = await response.json()
                 setNome(responseBody.disciplina.nome)
                 await carregarAlunos(responseBody.disciplina.turma)
+                await carregarAtividades()
             }
         }
 
@@ -45,6 +46,22 @@ const DisciplinaTurma = (props) => {
             if(response.status === 200){
                 const responseBody = await response.json()
                 setAlunos(responseBody.turma.alunos)
+            }
+        }
+
+        const carregarAtividades = async () => {
+            const response = await fetch(`http://www.localhost:3002/tarefa?disciplinaId=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            if(response.status === 200){
+                const responseBody = await response.json()
+                
+                setAtividades(responseBody.tarefas)
             }
         }
 
@@ -93,18 +110,18 @@ const DisciplinaTurma = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-{/*                             
                         {
-                            alunos && 
-                            alunos.map((aluno, index) => (
+                            
+                            atividades && 
+                            atividades.map((atividade, index) => (
                                 <tr key={index} 
-                                    onClick={() => props.history.push(`/disciplina/${id}/aluno/${aluno.id}`)}>
+                                    onClick={() => props.history.push(`/tarefa/salvar/${atividade.id}`)}>
                                     <td>
-                                        {aluno.nome}
+                                        {atividade.titulo}
                                     </td>
                                 </tr>
                             ))
-                        } */}
+                        }
                             </tbody>
                         </table>
                         
