@@ -28,8 +28,20 @@ export default class TurmaService {
         return await turmaModel.save()
     }
 
-    async listar() {
-        return await TurmaModel.find({})
+    async listar(params) {
+        const filtro = { }
+
+        if(params.alunoId){
+            filtro.alunos = params.alunoId
+        }
+
+        const turmas =  await TurmaModel.find(filtro)
+        
+        for(const turma of turmas) {
+            turma.disciplinas = await Promise.all(turma.disciplinas.map(async x => await this.disciplinaService.buscarPorId(x)))
+        }
+
+        return turmas
     }
 
     async buscarPorId(id) {

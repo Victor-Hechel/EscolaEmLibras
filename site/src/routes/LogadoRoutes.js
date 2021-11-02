@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import AutenticacaoContext from '../contextos/autenticacao'
 import AdminRoutes from './AdminRoutes'
 import ProfessorRoutes from './ProfessorRoutes'
+import AlunoRoutes from './AlunoRoutes'
 
 const LogadoRoutes = () => {
 
@@ -12,7 +13,7 @@ const LogadoRoutes = () => {
     switch(kind){
         case 'admin': return (<AdminRoutes />);
         case 'professor': return (<ProfessorRoutes />);
-        case 'aluno': return (<div></div>);
+        case 'aluno': return (<AlunoRoutes />);
         default: return (<></>);
     }
 }

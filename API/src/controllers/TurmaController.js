@@ -11,7 +11,7 @@ export default class TurmaController {
     async list(req, resp) {
 
         try{
-            const turmas = await this.turmaService.listar()
+            const turmas = await this.turmaService.listar({ alunoId: req.query.alunoId })
 
             if(!turmas.length) {
                 resp.status(204).json()
@@ -22,7 +22,11 @@ export default class TurmaController {
                 turmas: turmas.map(x => ({
                     id: x._id,
                     codigo: x.codigo,
-                    nome: x.nome
+                    nome: x.nome,
+                    disciplinas: x.disciplinas.map(disc => ({
+                        id: disc._id,
+                        nome: disc.nome
+                    }))
                 }))
             })
         }catch(e){
