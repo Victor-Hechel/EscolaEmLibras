@@ -19,8 +19,14 @@ export const AutenticacaoProvider = ({ children }) => {
         
     }
 
+    function Deslogar(){
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+        setToken(null)
+    }
+
     return (
-        <AutenticacaoContext.Provider value={{ signed: true, Logar, token, user: JSON.parse(user) }}>
+        <AutenticacaoContext.Provider value={{ signed: true, Logar, Deslogar, token, user: JSON.parse(user) }}>
             {children}
         </AutenticacaoContext.Provider>
     )
