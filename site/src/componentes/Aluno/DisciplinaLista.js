@@ -45,7 +45,7 @@ const DisciplinaLista = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                            {console.log(disciplinas)}
+
                         {
                             disciplinas && 
                             disciplinas.map((disciplina, index) => (

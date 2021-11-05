@@ -67,7 +67,7 @@ export default class RoutesManager {
         const router = TarefaRoutes.initializeRoutes(Router())
         this.app.use('/tarefa', 
             Authentication.authentication, 
-            Authentication.authorization(["Professor"]),
+            Authentication.authorization(["Professor", "Aluno"]),
             router)
     }
 
@@ -91,7 +91,7 @@ export default class RoutesManager {
         const router = DisciplinaRoutes.initializeRoutes(Router())
         this.app.use('/disciplina',
             Authentication.authentication,
-            Authentication.authorization(["Admin", "Professor"]),
+            Authentication.authorization(["Admin", "Professor", "Aluno"]),
             router)
     }
 }
