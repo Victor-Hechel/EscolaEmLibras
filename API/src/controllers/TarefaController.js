@@ -131,4 +131,40 @@ export default class TarefaController {
 
     }
 
+    async carregar(req, resp) {
+        try{
+            const tarefa = await this.tarefaService.carregar(req.params.id)
+
+            const tarefaDto = {
+                id: tarefa._id,
+                titulo: tarefa.titulo,
+                disciplina: {
+                    id: tarefa.disciplina.id,
+                    nome: tarefa.disciplina.nome
+                },
+                questoes: []
+            }
+
+            for(const questao of tarefa.questoes){
+                const questaoDto = {
+                    id: questao._id,
+                    kind: questao.kind,
+                    enunciado: questao.enunciado,
+                    midia: questao.midia
+                }
+                tarefaDto.questoes.push(questaoDto)
+            }
+
+            resp.status(200).json({
+                tarefa: tarefaDto
+            })
+
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                message: "Erro ao tentar carregar tarefa"
+            })
+        }
+    }
+
 }

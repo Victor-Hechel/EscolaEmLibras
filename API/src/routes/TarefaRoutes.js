@@ -8,6 +8,7 @@ export default class TarefaRoutes {
 
         router.post('/', TarefaController.create)
         router.get('/', controller.listar.bind(controller))
+        router.get('/:id', controller.carregar.bind(controller))
 
         return router
     }

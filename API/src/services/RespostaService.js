@@ -77,7 +77,6 @@ export default class RespostaService {
 
         const questaoGabarito = gabarito.questoes.filter(q => q.questao == questaoId)[0]
 
-
         if (questaoGabarito instanceof QuestaoMultiplaRespostaModel) {
             return questaoGabarito.alternativa == respostaAluno
         }else if (questaoGabarito instanceof QuestaoEscritaRespostaModel) {

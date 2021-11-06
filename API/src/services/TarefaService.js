@@ -1,4 +1,8 @@
 import TarefaModel from "../model/Tarefa.js"
+import DisciplinaModel from "../model/Disciplina.js"
+import QuestaoEscritaModel from "../model/QuestaoEscrita.js"
+import QuestaoModel from "../model/Questao.js"
+
 
 export default class TarefaService {
 
@@ -17,6 +21,23 @@ export default class TarefaService {
             questoes: tarefa.questoes
         }))
 
+    }
+
+    async carregar(id) {
+        const tarefa = await TarefaModel.findById(id)
+        tarefa.disciplina = await DisciplinaModel.findById(tarefa.disciplina)
+
+        const questoesCarregadas = []
+
+        for(const questao of tarefa.questoes){
+            const questaoGenericaCarregada = await QuestaoModel.findById(questao)
+            if(questaoGenericaCarregada.kind === 'QuestaoEscrita')
+                questoesCarregadas.push(await QuestaoEscritaModel.findById(questao))
+        }
+
+        tarefa.questoes = questoesCarregadas
+
+        return tarefa
     }
 
 }
