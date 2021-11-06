@@ -64,20 +64,27 @@ const Tarefa = (props) => {
     }
 
     var questaoPage = null
-    
-    if(questaoAtual != null){
+
+    if(questaoAtual != null && questaoAtual < tarefa.questoes.length){
         questaoPage = <Questao 
             questao={tarefa.questoes[questaoAtual]} 
             respostaId={respostaId} 
             proximaQuestao={proximaQuestao} />
     }
-    else{
+    else if(questaoAtual == null){
         questaoPage = <div>
             <TituloPainel titulo={tarefa.titulo} />
             <h3>Questões: 0/{tarefa.questoes.length}</h3>
             <button type="button" className="btn btn-primary" onClick={comecarTarefa}>Começar</button>
         </div>
+    } else {
+        questaoPage = <div>
+            <TituloPainel titulo="Tarefa finalizada!" />
+            <h3>Questões certas: {0}/{tarefa.questoes.length}</h3>
+            <h4>Pontos: {0}</h4>
+        </div>
     }
+
         
 
     return (
