@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import QuestaoEscrita from "./QuestaoEscrita"
 import AutenticacaoContext from '../../contextos/autenticacao'
 
@@ -11,14 +11,19 @@ const Questao = (props) => {
 
     const [ respostaCerta, setRespostaCerta ] = useState(null)
 
-    console.log(respondidoQuestao)
-    console.log(respostaCerta)
+    useEffect(() => {
+        setRespostaCerta(null)
+        setRespondidoQuestao(null)
+    }, [props.questao])
+
     var questao = null
     if(props.questao.kind){
         questao = <QuestaoEscrita 
-            questao={props.questao} 
+            questao={props.questao}
+            respondido={respondidoQuestao}
             setRespondidoQuestao={setRespondidoQuestao}
-            respostaCerta={respostaCerta} />
+            respostaCerta={respostaCerta} 
+            proximaQuestao={props.proximaQuestao} />
     }
 
     async function responder(){
@@ -44,7 +49,7 @@ const Questao = (props) => {
     return (
         <div>
             {questao}
-            <button type="button" className="btn btn-primary" onClick={responder}>Próxima</button>
+            <button type="button" className="btn btn-primary" onClick={responder}>Responder</button>
         </div>
     )
 }

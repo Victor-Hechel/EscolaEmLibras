@@ -59,10 +59,17 @@ const Tarefa = (props) => {
 
     }
 
+    function proximaQuestao(){
+        setQuestaoAtual(questaoAtual+1)
+    }
+
     var questaoPage = null
     
     if(questaoAtual != null){
-        questaoPage = <Questao questao={tarefa.questoes[questaoAtual]} respostaId={respostaId} />
+        questaoPage = <Questao 
+            questao={tarefa.questoes[questaoAtual]} 
+            respostaId={respostaId} 
+            proximaQuestao={proximaQuestao} />
     }
     else{
         questaoPage = <div>

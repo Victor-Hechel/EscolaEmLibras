@@ -3,13 +3,14 @@ import React from "react"
 const QuestaoEscrita = (props) => {
 
     var respostaHtml = null
-    console.log(props.respostaCerta)
+
+    const respostaInput = props.respondido ? props.respondido : ""
 
     if(props.respostaCerta){
         if(props.respostaCerta.estaCerta){
             respostaHtml = <div>
                 <h3>Resposta Certa!</h3>
-                <button type="button" className="btn btn-primary">Próxima</button>
+                <button type="button" className="btn btn-primary" onClick={props.proximaQuestao}>Próxima</button>
             </div>
         }else{
             respostaHtml = <div>
@@ -17,6 +18,7 @@ const QuestaoEscrita = (props) => {
                 <p>
                     Resposta Certa: {props.respostaCerta.certa}
                 </p>
+                <button type="button" className="btn btn-primary" onClick={props.proximaQuestao}>Próxima</button>
             </div>
         }
     }
@@ -24,7 +26,9 @@ const QuestaoEscrita = (props) => {
     return (
         <div>
             <h3>{props.questao.enunciado}</h3>
-            <input type="text" className="form-control" placeholder="Digite sua resposta..." onChange={e => props.setRespondidoQuestao(e.target.value)}/>
+            <input type="text" className="form-control" placeholder="Digite sua resposta..." 
+                onChange={e => props.setRespondidoQuestao(e.target.value)} 
+                value={respostaInput}/>
             {respostaHtml}
         </div>
     )
