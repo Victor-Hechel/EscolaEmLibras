@@ -161,6 +161,20 @@ export default class TarefaController {
                     }))
                 }
 
+                if(questao.kind === 'QuestaoPares'){
+                    questaoDto.colunaEsquerda = questao.colunaEsquerda.map(x => ({
+                        id: x._id,
+                        texto: x.texto,
+                        midia: x.midia
+                    }))
+
+                    questaoDto.colunaDireita = questao.colunaDireita.map(x => ({
+                        id: x._id,
+                        texto: x.texto,
+                        midia: x.midia
+                    }))
+                }
+
                 tarefaDto.questoes.push(questaoDto)
             }
 

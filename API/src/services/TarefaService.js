@@ -2,6 +2,7 @@ import TarefaModel from "../model/Tarefa.js"
 import DisciplinaModel from "../model/Disciplina.js"
 import QuestaoEscritaModel from "../model/QuestaoEscrita.js"
 import QuestaoMultiplaModel from "../model/QuestaoMultipla.js"
+import QuestaoParesModel from "../model/QuestaoPares.js"
 import QuestaoModel from "../model/Questao.js"
 
 
@@ -36,6 +37,8 @@ export default class TarefaService {
                 questoesCarregadas.push(await QuestaoEscritaModel.findById(questao))
             else if(questaoGenericaCarregada.kind === 'QuestaoMultipla')
                 questoesCarregadas.push(await QuestaoMultiplaModel.findById(questao))
+            else if(questaoGenericaCarregada.kind === 'QuestaoPares')
+                questoesCarregadas.push(await QuestaoParesModel.findById(questao))
         }
 
         tarefa.questoes = questoesCarregadas
