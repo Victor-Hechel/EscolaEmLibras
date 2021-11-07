@@ -52,7 +52,6 @@ const Tarefa = (props) => {
 
         if(response.status === 201){
             const responseBody = await response.json()
-            console.log(responseBody)
             setRespostaId(responseBody.id)
             setQuestaoAtual(0)
         }

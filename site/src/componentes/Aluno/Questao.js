@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import QuestaoEscrita from "./QuestaoEscrita"
 import AutenticacaoContext from '../../contextos/autenticacao'
+import QuestaoMultipla from "./QuestaoMultipla"
 
 
 const Questao = (props) => {
@@ -17,8 +18,15 @@ const Questao = (props) => {
     }, [props.questao])
 
     var questao = null
-    if(props.questao.kind){
+    if(props.questao.kind === 'QuestaoEscrita'){
         questao = <QuestaoEscrita 
+            questao={props.questao}
+            respondido={respondidoQuestao}
+            setRespondidoQuestao={setRespondidoQuestao}
+            respostaCerta={respostaCerta} 
+            proximaQuestao={props.proximaQuestao} />
+    }else if(props.questao.kind === 'QuestaoMultipla'){
+        questao = <QuestaoMultipla 
             questao={props.questao}
             respondido={respondidoQuestao}
             setRespondidoQuestao={setRespondidoQuestao}
