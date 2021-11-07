@@ -152,6 +152,15 @@ export default class TarefaController {
                     enunciado: questao.enunciado,
                     midia: questao.midia
                 }
+
+                if(questao.kind === 'QuestaoMultipla') {
+                    questaoDto.alternativas = questao.alternativas.map(x => ({
+                        id: x._id,
+                        texto: x.texto,
+                        midia: x.midia
+                    }))
+                }
+
                 tarefaDto.questoes.push(questaoDto)
             }
 
