@@ -166,3 +166,16 @@ header h1 {
 #opcoes-admin .row{
   margin-bottom: 10px;
 }
+
+.box-par{
+  background-color: lightgray;
+  border: 1px solid black;
+}
+
+.box-par:hover{
+  cursor: pointer;
+}
+
+.box-par.selected{
+  background-color: darkgray;
+}
