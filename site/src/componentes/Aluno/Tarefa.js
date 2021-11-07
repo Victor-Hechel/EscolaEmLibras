@@ -66,6 +66,7 @@ const Tarefa = (props) => {
 
     if(questaoAtual != null && questaoAtual < tarefa.questoes.length){
         questaoPage = <Questao 
+            key={questaoAtual}
             questao={tarefa.questoes[questaoAtual]} 
             respostaId={respostaId} 
             proximaQuestao={proximaQuestao} />

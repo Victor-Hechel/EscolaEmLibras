@@ -12,10 +12,12 @@ const Questao = (props) => {
 
     const [ respostaCerta, setRespostaCerta ] = useState(null)
 
+    const questaoProps = props.questao
+
     useEffect(() => {
         setRespostaCerta(null)
         setRespondidoQuestao(null)
-    }, [props.questao])
+    }, [questaoProps])
 
     var questao = null
     if(props.questao.kind === 'QuestaoEscrita'){
