@@ -6,7 +6,8 @@ export default class RespostaRoutes {
         const controller = new RespostaController()
         router.post('/', RespostaController.create)
         router.post('/questao', controller.createRespostaQuestao.bind(controller))
-
+        router.get('/:id', controller.carregar.bind(controller))
+        
         return router
     }
 

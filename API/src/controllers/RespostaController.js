@@ -56,10 +56,34 @@ export default class RespostaController {
         }catch(err){
             console.log(err)
             resp.status(500).json({
-                message: "Erro ao tentar responder questao"
+                mensagem: "Erro ao tentar responder questao"
             })
         }
     
+    }
+
+    async carregar(req, resp) {
+        try{
+            const respostaAluno = await this.respostaService.carregar(req.params.id)
+
+            const gabarito = await this.respostaService.carregarGabarito(respostaAluno.tarefaId)
+
+            for(const questao of respostaAluno.questoes){
+                if(!questao.respostaAluno.certa){
+                    questao.respostaCerta = gabarito.questoes.filter(x => x.questao.equals(questao.respostaAluno.questao))[0]
+                }
+            }
+
+            resp.status(200).json({
+                resposta: respostaAluno
+            })
+
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Falha ao tentar carregar resposta"
+            })
+        }
     }
 
 }

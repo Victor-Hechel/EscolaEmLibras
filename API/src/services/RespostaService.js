@@ -1,6 +1,7 @@
 import QuestaoModel from "../model/Questao.js"
 import QuestaoMultiplaModel from "../model/QuestaoMultipla.js"
 import RespostaModel from "../model/Resposta.js"
+import RespostaAlunoModel from "../model/RespostaAluno.js"
 import QuestaoRespostaModel from "../model/QuestaoResposta.js"
 import QuestaoMultiplaRespostaModel from "../model/QuestaoMultiplaResposta.js"
 import QuestaoEscritaRespostaModel from "../model/QuestaoEscritaResposta.js"
@@ -72,13 +73,12 @@ export default class RespostaService {
 
     async estaCorreta(questaoId, respostaAluno) {
         const questao = await QuestaoModel.findById(questaoId)
-
+        
         const gabarito = await this.carregarGabarito(questao.tarefaId)
 
-        const questaoGabarito = gabarito.questoes.filter(q => q.questao == questaoId)[0]
-
+        const questaoGabarito = gabarito.questoes.filter(q => q.questao.equals(questaoId))[0]
         if (questaoGabarito instanceof QuestaoMultiplaRespostaModel) {
-            return questaoGabarito.alternativa == respostaAluno
+            return questaoGabarito.alternativa.equals(respostaAluno)
         }else if (questaoGabarito instanceof QuestaoEscritaRespostaModel) {
             return this.formatarRespostaEscrita(questaoGabarito.respostaQuestao) == this.formatarRespostaEscrita(respostaAluno)
         }else if (questaoGabarito instanceof QuestaoParesRespostaModel) {
@@ -89,18 +89,77 @@ export default class RespostaService {
     }
 
     formatarRespostaEscrita(respostaEscrita){
+        if(respostaEscrita == null)
+            return ""
         return respostaEscrita.trim().toLowerCase().replace(/ {2,}/gm, " ")
     }
 
     listaDeParesEhIgual(paresGabarito, paresResposta){
         for(const parGabarito of paresGabarito){
-            const encontrouPar = paresResposta.some(x => x.colunaEsquerda == parGabarito.colunaEsquerda &&
-                x.colunaDireita == parGabarito.colunaDireita)
+            const encontrouPar = paresResposta.some(x => parGabarito.colunaEsquerda.equals(x.colunaEsquerda) &&
+                parGabarito.colunaDireita.equals(x.colunaDireita))
 
             if(!encontrouPar)
                 return false
         }
 
         return true
+    }
+
+    async carregar(id) {
+        const resposta = await RespostaAlunoModel.findById(id)
+        
+        const gabarito = await this.carregarGabarito(resposta.tarefa)
+
+        const questoesRespostasDto = []
+
+        resposta.questoes = await QuestaoRespostaModel.find({ resposta: resposta._id }) 
+
+        for(const questaoResposta of resposta.questoes){
+            const questaoRespostaModel = await QuestaoRespostaModel.findById(questaoResposta)
+            
+            const questaoRespostaDto = { 
+                id: questaoRespostaModel._id, 
+                tarefaId: resposta.tarefa,
+                questao: questaoRespostaModel.questao,
+                kind: questaoRespostaModel.kind
+            }
+            
+            if(questaoRespostaModel instanceof QuestaoMultiplaRespostaModel){
+                questaoRespostaDto.alternativa = questaoRespostaModel.alternativa
+            }else if(questaoRespostaModel instanceof QuestaoEscritaRespostaModel){
+                questaoRespostaDto.respostaQuestao = questaoRespostaModel.respostaQuestao
+            }else if(questaoRespostaModel instanceof QuestaoParesRespostaModel){
+                questaoRespostaDto.pares = questaoRespostaModel.pares
+            }
+
+            questoesRespostasDto.push(questaoRespostaDto)
+        }
+
+        const retorno = {
+            id: resposta._id,
+            tarefaId: resposta.tarefa,
+            questoes: await Promise.all(questoesRespostasDto.map(async q => ({
+                respostaAluno: {
+                    ...q,
+                    certa: await this.estaCorreta(q.questao, this._getRespondido(q))
+                }
+            })))
+        }
+
+        retorno.pontos = retorno.questoes.reduce((pontos, q) => pontos + (q.respostaAluno.certa ? 10 : 0), 0)
+
+        return retorno
+    }
+
+    _getRespondido(respostaAluno){
+        var respondido = null
+        if(respostaAluno.kind === 'QuestaoEscritaResposta')
+            respondido = respostaAluno.respostaQuestao
+        else if(respostaAluno.kind === 'QuestaoMultiplaResposta')
+            respondido = respostaAluno.alternativa
+        else if(respostaAluno.kind === 'QuestaoParesResposta')
+            respondido = respostaAluno.pares
+        return respondido
     }
 }
