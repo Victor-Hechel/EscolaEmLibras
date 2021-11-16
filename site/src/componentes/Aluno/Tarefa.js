@@ -3,6 +3,7 @@ import AutenticacaoContext from '../../contextos/autenticacao'
 import Header from "../Header";
 import TituloPainel from "../TituloPainel";
 import Questao from "./Questao";
+import ResumoTarefa from "./ResumoTarefa";
 
 const Tarefa = (props) => {
 
@@ -78,11 +79,7 @@ const Tarefa = (props) => {
             <button type="button" className="btn btn-primary" onClick={comecarTarefa}>Começar</button>
         </div>
     } else {
-        questaoPage = <div>
-            <TituloPainel titulo="Tarefa finalizada!" />
-            <h3>Questões certas: {0}/{tarefa.questoes.length}</h3>
-            <h4>Pontos: {0}</h4>
-        </div>
+        questaoPage = <ResumoTarefa respostaId={respostaId} />
     }
 
         
