@@ -5,7 +5,7 @@ const QuestaoMultipla = (props) => {
     var respostaHtml = null
 
     if(props.respostaCerta){
-        if(props.respostaCerta.estaCerta){
+        if(props.respostaCerta.estaCorreta){
             respostaHtml = <div>
                 <h3>Resposta Certa!</h3>
                 <button type="button" className="btn btn-primary" onClick={props.proximaQuestao}>Próxima</button>
