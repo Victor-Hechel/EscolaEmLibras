@@ -1,6 +1,17 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 const QuestaoPares = (props) => {
+
+    const [ colunas, setColunas ] = useState({ colunaEsquerda: [], colunaDireita: [] })
+
+    useEffect(() => {
+
+        setColunas({
+            colunaEsquerda: props.questao.colunaEsquerda.sort( () => Math.random() - 0.5),
+            colunaDireita: props.questao.colunaDireita.sort( () => Math.random() - 0.5)
+        })
+
+    }, [props.questao])
 
     function selecionarPar(idEsquerda, idDireita){
         const respondidoDefault = props.respondido ? props.respondido : []
@@ -14,7 +25,7 @@ const QuestaoPares = (props) => {
                 colunaDireita: idDireita
             })
         }
-        
+
         props.setRespondidoQuestao(respondidoRemovendoEscolhaAntiga)
     }
 
@@ -57,8 +68,8 @@ const QuestaoPares = (props) => {
             <div className="row">
                 <div className="col">
                     {
-                        props.questao.colunaEsquerda &&
-                        props.questao.colunaEsquerda.map((par, index) =>
+                        colunas.colunaEsquerda &&
+                        colunas.colunaEsquerda.map((par, index) =>
                         (
                             <div className="row" key={index}>
                                 <div className="col-xl box-par">
@@ -72,15 +83,15 @@ const QuestaoPares = (props) => {
                 </div>
                 <div className="col">
                 {
-                        props.questao.colunaDireita &&
-                        props.questao.colunaDireita.map((par, index) =>
+                        colunas.colunaDireita &&
+                        colunas.colunaDireita.map((par, index) =>
                         (
                             <div className="row" key={index}>
                                 <div className="col-xl box-par">
                                     <select onChange={e => selecionarPar(e.target.value, par.id)}>
                                         <option value="">-</option>
                                         {
-                                            props.questao.colunaEsquerda.map((x, i) => (
+                                            colunas.colunaEsquerda.map((x, i) => (
                                                 <option key={i} value={x.id}>{i+1}</option>
                                             ))
                                         }
