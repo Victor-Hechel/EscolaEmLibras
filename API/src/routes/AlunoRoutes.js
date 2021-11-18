@@ -9,6 +9,7 @@ export default class AlunoRoutes {
         router.post('/', controller.create.bind(controller))
         router.put('/', controller.update.bind(controller))
         router.patch('/disable/:id', controller.disable.bind(controller))
+        router.post('/:id/aumentar-pontos', controller.aumentarPontuacao.bind(controller))
 
         return router
     }

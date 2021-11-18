@@ -6,9 +6,11 @@ const ResumoTarefa = (props) => {
 
     const respostaId = props.respostaId
 
-    const { token } = useContext(AutenticacaoContext)
+    const { token, user } = useContext(AutenticacaoContext)
 
     const [ resposta, setResposta ] = useState({})
+
+    const userId = user.id
 
     useEffect(() => {
         const carregarResposta = async () => {
@@ -23,12 +25,26 @@ const ResumoTarefa = (props) => {
             if(response.status === 200){
                 const responseBody = await response.json()
                 setResposta(responseBody.resposta)
+                atualizarPontos(responseBody.resposta.pontos)
             }
+        }
+
+        const atualizarPontos = (pontos) => {
+            fetch(`http://www.localhost:3002/aluno/${userId}/aumentar-pontos`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    pontos
+                })
+            })
         }
 
         carregarResposta()
 
-    }, [token, respostaId])
+    }, [token, respostaId, userId])
 
     var quantidadeQuestoesCertas = 0
     var quantidadeQuestoes = 0

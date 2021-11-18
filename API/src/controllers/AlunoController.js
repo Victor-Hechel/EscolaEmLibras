@@ -110,13 +110,26 @@ export default class AlunoController {
                 return
             }
 
-            aluno.cpf = alunoBody.cpf
-            aluno.nome = alunoBody.nome
-            aluno.dataNascimento = alunoBody.dataNascimento
-            aluno.email = alunoBody.email
-            aluno.genero = alunoBody.genero
-            aluno.tipo = alunoBody.tipo
-            aluno.pontos = alunoBody.pontos
+            if(alunoBody.cpf)
+                aluno.cpf = alunoBody.cpf
+            
+            if(alunoBody.nome)
+                aluno.nome = alunoBody.nome
+
+            if(alunoBody.dataNascimento)
+                aluno.dataNascimento = alunoBody.dataNascimento
+            
+            if(alunoBody.email)
+                aluno.email = alunoBody.email
+
+            if(alunoBody.genero)
+                aluno.genero = alunoBody.genero
+            
+            if(alunoBody.tipo)
+                aluno.tipo = alunoBody.tipo
+            
+            if(alunoBody.pontos)
+                aluno.pontos = alunoBody.pontos
 
             await this.alunoService.atualizar(aluno)
 
@@ -172,6 +185,43 @@ export default class AlunoController {
             })
         }
 
+    }
+
+    async aumentarPontuacao(req, resp){
+        const id  = req.params.id
+
+        try{
+            const aluno = await this.alunoService.buscarPorId(id)
+
+            if(!aluno){
+                resp.status(204).send()
+                return
+            }
+            
+            if(!aluno.pontos)
+                aluno.pontos = 0
+            
+            aluno.pontos += req.body.pontos
+
+            await this.alunoService.atualizar(aluno)
+
+            resp.status(200).send({
+                aluno: {
+                    id: aluno._id,
+                    nome: aluno.nome,
+                    dataNascimento: aluno.dataNascimento,
+                    email: aluno.email,
+                    genero: aluno.genero,
+                    pontos: aluno.pontos
+                }
+            })
+
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Erro ao tentar atualizar o aluno"
+            })
+        }
     }
 
 }
