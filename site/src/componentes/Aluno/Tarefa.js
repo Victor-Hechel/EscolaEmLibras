@@ -8,7 +8,8 @@ import ResumoTarefa from "./ResumoTarefa";
 const Tarefa = (props) => {
 
     const id  = props.match.params.id
-    const { token } = useContext(AutenticacaoContext)
+    const { token, user } = useContext(AutenticacaoContext)
+    const alunoId = user.id
     
     const [ tarefa, setTarefa ] = useState({
         titulo: "",
@@ -47,7 +48,8 @@ const Tarefa = (props) => {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                tarefaId: id
+                tarefaId: id,
+                alunoId: alunoId
             })
         })
 

@@ -1,13 +1,4 @@
-import RespostaModel from "../model/Resposta.js"
 import RespostaAlunoModel from "../model/RespostaAluno.js"
-import QuestaoModel from "../model/Questao.js"
-import QuestaoMultiplaModel from "../model/QuestaoMultipla.js"
-import QuestaoEscritaModel from "../model/QuestaoEscrita.js"
-import QuestaoParesModel from "../model/QuestaoPares.js"
-import QuestaoRespostaModel from "../model/QuestaoResposta.js"
-import QuestaoMultiplaRespostaModel from "../model/QuestaoMultiplaResposta.js"
-import QuestaoEscritaRespostaModel from "../model/QuestaoEscritaResposta.js"
-import QuestaoParesRespostaModel from "../model/QuestaoParesResposta.js"
 import RespostaService from "../services/RespostaService.js"
 
 
@@ -24,7 +15,7 @@ export default class RespostaController {
             const respostaAluno = await 
                 new RespostaAlunoModel({
                     tarefa: req.body.tarefaId,
-                    aluno: req.id,
+                    aluno: req.body.alunoId,
                     dataResposta: new Date()
                 }).save()
 
@@ -82,6 +73,22 @@ export default class RespostaController {
             console.log(err)
             resp.status(500).json({
                 mensagem: "Falha ao tentar carregar resposta"
+            })
+        }
+    }
+
+    async listar(req, resp) {
+        try{
+            const respostas = await this.respostaService.listarPorAluno(req.query.alunoId)
+
+            resp.status(200).json({
+                respostas
+            })
+
+        }catch(err){
+            console.log(err)
+            resp.status(500).json({
+                mensagem: "Falha ao tentar listar respostas"
             })
         }
     }

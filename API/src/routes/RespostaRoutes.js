@@ -7,7 +7,8 @@ export default class RespostaRoutes {
         router.post('/', RespostaController.create)
         router.post('/questao', controller.createRespostaQuestao.bind(controller))
         router.get('/:id', controller.carregar.bind(controller))
-        
+        router.get('/', controller.listar.bind(controller))
+
         return router
     }
 

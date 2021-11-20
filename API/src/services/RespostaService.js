@@ -152,6 +152,17 @@ export default class RespostaService {
         return retorno
     }
 
+    async listarPorAluno(alunoId){
+        const respostasAluno = await RespostaAlunoModel.find({ aluno: alunoId })
+        const respostasCarregadas = []
+
+        for(const resposta of respostasAluno){
+            respostasCarregadas.push(await this.carregar(resposta._id))
+        }
+
+        return respostasCarregadas
+    }
+
     _getRespondido(respostaAluno){
         var respondido = null
         if(respostaAluno.kind === 'QuestaoEscritaResposta')

@@ -83,7 +83,7 @@ export default class RoutesManager {
         const router = RespostaRoutes.initializeRoutes(Router())
         this.app.use('/resposta',
             Authentication.authentication,
-            Authentication.authorization(["Aluno"]),
+            Authentication.authorization(["Aluno", "Professor"]),
             router)    
     }
 
