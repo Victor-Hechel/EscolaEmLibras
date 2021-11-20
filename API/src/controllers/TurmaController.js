@@ -42,7 +42,7 @@ export default class TurmaController {
 
         try{
             const turma = await this.turmaService.buscarPorId(req.params.id)
-
+            
             resp.status(200).json({
                 turma: {
                     id: turma._id,
@@ -55,8 +55,9 @@ export default class TurmaController {
                     })),
                     alunos: turma.alunos.map(x => ({ 
                         id: x.id, 
-                        nome: x.nome 
-                    }))
+                        nome: x.nome,
+                        pontos: x.pontos
+                    })).sort((first, second) => second.pontos - first.pontos)
                 }
             })
         }catch(e) {
