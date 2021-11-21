@@ -28,8 +28,10 @@ export default class MediaService {
         mediaEntry.type = tipo
 
         if(mediaEntry.type == 'video'){
+            mediaEntry.extension = ext
             await this.uploadVideo(mediaEntry._id, ext, media)
         }else if(mediaEntry.type == 'image') {
+            mediaEntry.extension = '.webp'
             await this.uploadImage(mediaEntry._id, media)
         }
         

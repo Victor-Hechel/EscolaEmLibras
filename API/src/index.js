@@ -53,7 +53,7 @@ async function limparTudo(){
     for(const mediaEntry of results){
         try{
             await mediaEntry.remove()
-            await unlink(`uploads/${mediaEntry.id}.${mediaEntry.type == 'image' ? 'webp' : "mp4"}`)
+            await unlink(`uploads/${mediaEntry.fullName()}`)
         }catch(err){
             console.log(`Error trying to delete media entry ${mediaEntry.id}`, err)
         }

@@ -30,7 +30,7 @@ export default class MediaController {
             resp.status(200).json({
                 message: "Upload bem sucedido", 
                 info: {
-                    id: mediaEntry._id,
+                    id: mediaEntry.fullName(),
                     expiresIn: mediaEntry.expiresIn
                 } 
             })
