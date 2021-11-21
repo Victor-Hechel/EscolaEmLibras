@@ -18,6 +18,12 @@ const QuestaoParesForm = (props) => {
         props.setAlteracoes(props.index, novoAtributo)
     }
 
+    function setAlteracaoMidiaPar(index, coluna){
+        return (value) => {
+            setAlteracaoPar(index, coluna, { midia: value })
+        }
+    }
+
     return (
         <div className="container" id="questao">
             <div className="row">
@@ -62,7 +68,7 @@ const QuestaoParesForm = (props) => {
                                 <div className="col-xl">
                                     <label htmlFor="textoMidia" className="form-label">Texto Libras</label>
                                     <input type="file" name="textoMidia" className="form-control" id="textoMidia"
-                                        onChange={e => props.salvarAnexo(props.index, e)} />
+                                        onChange={e => props.salvarAnexo(props.index, e, setAlteracaoMidiaPar(index, "colunaEsquerda"))} />
                                 </div>
                             </div>
                         )
@@ -85,7 +91,7 @@ const QuestaoParesForm = (props) => {
                                 <div className="col-md">
                                     <label htmlFor="textoMidia" className="form-label">Texto Libras</label>
                                     <input type="file" name="textoMidia" className="form-control" id="textoMidia"
-                                        onChange={e => props.salvarAnexo(props.index, e)} />
+                                        onChange={e => props.salvarAnexo(props.index, e, setAlteracaoMidiaPar(index, "colunaDireita"))} />
                                 </div>
                             </div>
                         )
