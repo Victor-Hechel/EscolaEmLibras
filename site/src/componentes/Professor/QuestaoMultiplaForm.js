@@ -16,6 +16,12 @@ const QuestaoMultiplaForm = (props) => {
         props.setAlteracoes(props.index, { alternativas: alternativasCopy})
     }
 
+    function setAlteracaoMidiaAlternativa(index){
+        return (value) => {
+            setAlteracaoAlternativa(index, { midia: value })
+        }
+    }
+
     return (
         <div className="container" id="questao">
             <div className="row">
@@ -59,7 +65,7 @@ const QuestaoMultiplaForm = (props) => {
                             <div className="col">
                                 <label htmlFor="textoMidia" className="form-label">Texto Libras</label>
                                 <input type="file" name="textoMidia" className="form-control" id="textoMidia"
-                                    onChange={e => props.salvarAnexo(props.index, e)} />
+                                    onChange={e => props.salvarAnexo(props.index, e, setAlteracaoMidiaAlternativa(index))} />
                             </div>
                         </div>
 

@@ -111,10 +111,10 @@ const TarefaForm = (props) => {
         setQuestoes([...questoes, novaQuestao])
     }
 
-    function salvarAnexo(index, e) {
+    function salvarAnexo(indice, e, callBack = (value) => setObjectInArray(indice, { tituloMidia: value })) {
         if (!e.target.files)
             return
-        console.log(e.target.files[0])
+
         const data = new FormData()
         data.append('media', e.target.files[0])
 
@@ -127,7 +127,7 @@ const TarefaForm = (props) => {
         }).then(async x => {
             if (x.status === 200) {
                 const responseBody = await x.json()
-                setObjectInArray(index, { tituloMidia: responseBody.info.id });
+                callBack(responseBody.info.id);
             } else {
                 const respBody = await x.json()
                 setErro(respBody.mensagem)
