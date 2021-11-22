@@ -199,3 +199,12 @@ video{
 .bold{
   font-weight: bold;
 }
+
+.flex-container{
+  display: flex;
+  align-items: center;
+}
+
+.flex-item{
+  padding: 10px
+}
