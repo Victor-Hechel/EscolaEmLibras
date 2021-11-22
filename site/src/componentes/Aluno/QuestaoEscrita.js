@@ -1,4 +1,5 @@
 import React from "react"
+import TituloQuestao from "../TituloQuestao"
 
 const QuestaoEscrita = (props) => {
 
@@ -8,29 +9,30 @@ const QuestaoEscrita = (props) => {
 
     if(props.respostaCerta){
         if(props.respostaCerta.estaCorreta){
-            respostaHtml = <div>
+            respostaHtml = <div className="margin-bottom">
                 <h3>Resposta Certa!</h3>
-                <button type="button" className="btn btn-primary" onClick={props.proximaQuestao}>Próxima</button>
             </div>
         }else{
-            respostaHtml = <div>
+            respostaHtml = <div className="margin-bottom">
                 <h3>Resposta Errada!</h3>
                 <p>
-                    Resposta Certa: {props.respostaCerta.certa}
+                    Resposta Certa: <span className="bold">{props.respostaCerta.certa}</span>
                 </p>
-                <button type="button" className="btn btn-primary" onClick={props.proximaQuestao}>Próxima</button>
             </div>
         }
     }
 
     return (
-        <div>
-            <h3>{props.questao.enunciado}</h3>
-            <input type="text" className="form-control" placeholder="Digite sua resposta..." 
-                onChange={e => props.setRespondidoQuestao(e.target.value)} 
-                value={respostaInput}/>
+        <>
+            <div className="margin-bottom">
+                <TituloQuestao questao={props.questao} />
+                <input type="text" className="form-control" placeholder="Digite sua resposta..." 
+                    onChange={e => props.setRespondidoQuestao(e.target.value)} 
+                    value={respostaInput}/>    
+            </div>
             {respostaHtml}
-        </div>
+        </>
+        
     )
 
 }

@@ -23,6 +23,7 @@ app.use((req, resp, next) => {
     next()
 })
 
+app.use(express.static('uploads'))
 app.use(urlencoded({ extended: false }))
 app.use(json())
 app.use(fileUpload({
@@ -35,7 +36,7 @@ new RouterControl(app).initializeRoutes()
 
 cron.schedule('0 */1 * * *', function() {
     console.log(new Date(), ' running a task every hour');
-    limparTudo();
+    // limparTudo();
 });
   
 

@@ -179,3 +179,23 @@ header h1 {
 .box-par.selected{
   background-color: darkgray;
 }
+
+video{
+  max-width: 100%;
+}
+
+.titulo * {
+  margin-bottom: 20px;
+}
+
+.titulo video,img{
+  max-height: 500px;
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.bold{
+  font-weight: bold;
+}

@@ -64,10 +64,17 @@ const Questao = (props) => {
         }
     }
 
+    var botao = <button type="button" className="btn btn-primary form-control" onClick={responder}>Responder</button>
+
+    if(respostaCerta){
+        botao = <button type="button" className="btn btn-primary form-control" onClick={props.proximaQuestao}>Próxima</button>
+
+    }
+
     return (
         <div>
             {questao}
-            <button type="button" className="btn btn-primary" onClick={responder}>Responder</button>
+            {botao}
         </div>
     )
 }
