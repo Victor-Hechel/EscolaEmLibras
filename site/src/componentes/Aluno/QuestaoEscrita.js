@@ -25,7 +25,9 @@ const QuestaoEscrita = (props) => {
     return (
         <>
             <div className="margin-bottom">
-                <TituloQuestao questao={props.questao} />
+                <span className="midia-md">
+                    <TituloQuestao questao={props.questao} />
+                </span>
                 <input type="text" className="form-control" placeholder="Digite sua resposta..." 
                     onChange={e => props.setRespondidoQuestao(e.target.value)} 
                     value={respostaInput}/>    

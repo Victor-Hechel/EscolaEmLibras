@@ -188,10 +188,6 @@ video{
   margin-bottom: 20px;
 }
 
-.titulo video,img{
-  max-height: 500px;
-}
-
 .margin-bottom {
   margin-bottom: 20px;
 }
@@ -219,6 +215,6 @@ video{
   height: 1.3em;
 }
 
-.questao-multipla-escolha img,video {
+.midia-md img,video {
   max-height: 13em;
 }

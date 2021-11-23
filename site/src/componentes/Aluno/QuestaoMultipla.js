@@ -23,8 +23,7 @@ const QuestaoMultipla = (props) => {
     }
 
     return (
-        <>
-            
+        <div className="midia-md">
             <div className="margin-bottom questao-multipla-escolha">
                 <TituloQuestao questao={props.questao} />
                 <table id="lista" className="table table-bordered background-gray ">
@@ -54,7 +53,7 @@ const QuestaoMultipla = (props) => {
                 
             </div>
             {respostaHtml}
-        </>
+        </div>
     )
 
 }
