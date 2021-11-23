@@ -203,8 +203,22 @@ video{
 .flex-container{
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .flex-item{
   padding: 10px
+}
+
+.background-gray tr{
+  background-color: lightgray;
+}
+
+.questao-multipla-escolha input[type=radio]{
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.questao-multipla-escolha img,video {
+  max-height: 13em;
 }

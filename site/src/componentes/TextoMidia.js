@@ -19,7 +19,7 @@ const TextoMidia = (props) => {
     }
 
     return (
-        <div>
+        <div className="text-center">
             {titulo}
             {midia}
         </div>

@@ -24,28 +24,34 @@ const QuestaoMultipla = (props) => {
 
     return (
         <>
-            <div className="margin-bottom">
+            
+            <div className="margin-bottom questao-multipla-escolha">
                 <TituloQuestao questao={props.questao} />
-                {
-                    props.questao.alternativas &&
-                    props.questao.alternativas.map((alternativa,index) =>
-                    (
-                        <div key={index}>
-                            <div className="flex-container">
-                                <div className="flex-item">
-                                    <input type="radio" name="alternativaCorreta" className="form-check-input" value={alternativa.id} onChange={e => props.setRespondidoQuestao(e.target.value)}/>
-                                </div>
-                                <div className="flex-item">
-                                    <TextoMidia texto={alternativa.texto} midia={alternativa.midia} />
-                                </div>
-                            </div>
-
-                            <hr></hr>
-
-                        </div>
-                    )
-                    )
-                }
+                <table id="lista" className="table table-bordered background-gray ">
+                    <tbody>
+                    {
+                        props.questao.alternativas &&
+                        props.questao.alternativas.map((alternativa,index) =>
+                        (
+                            <tr key={index}>
+                                <td>
+                                    <div className="flex-container">
+                                        <div className="flex-item">
+                                            <input type="radio" name="alternativaCorreta" className="form-check-input" value={alternativa.id} onChange={e => props.setRespondidoQuestao(e.target.value)}/>
+                                        </div>
+                                        <div className="flex-item">
+                                            <TextoMidia texto={alternativa.texto} midia={alternativa.midia} />
+                                        </div>
+                                        <div className="flex-item"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        )
+                        )
+                    }
+                    </tbody>
+                </table>
+                
             </div>
             {respostaHtml}
         </>
