@@ -154,7 +154,7 @@ const TarefaForm = (props) => {
 
                         <div className="row">
                             <div className="col">
-                                <label htmlFor="titulo" className="form-label">Título PT</label>
+                                <label htmlFor="titulo" className="form-label">Título Tarefa</label>
                                 <input type="text" name="titulo" className="form-control" id="titulo"
                                     value={titulo} onChange={e => setTitulo(e.target.value)} />
                             </div>
@@ -162,7 +162,7 @@ const TarefaForm = (props) => {
 
                         <div className="row">
                             <div className="col">
-                                <h3>Questões</h3>
+                                <label>Questões</label>
 
                                 <div className="input-group mb-3 align-right">
                                     <select className="form-select" value={tipoSelecionado} onChange={e => setTipoSelecionado(e.target.value)}>
