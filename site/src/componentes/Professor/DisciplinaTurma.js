@@ -76,10 +76,10 @@ const DisciplinaTurma = (props) => {
                 <div className="form-container">
                     <div>
                         <TituloPainel titulo={nome} history={props.history} />
-                        <table id="lista" className="table table-bordered table-hover">
+                        <table id="lista" className="table table-hover lista-alunos">
                             <thead>
                                 <tr>
-                                    <th>Alunos</th>
+                                    <th colSpan="2">Alunos</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,6 +91,9 @@ const DisciplinaTurma = (props) => {
                                     onClick={() => props.history.push(`/disciplina/${id}/aluno/${aluno.id}`)}>
                                     <td>
                                         {aluno.nome}
+                                    </td>
+                                    <td>
+                                        {aluno.pontos} pts
                                     </td>
                                 </tr>
                             ))

@@ -218,3 +218,8 @@ video{
 .midia-md img,video {
   max-height: 13em;
 }
+
+.lista-alunos tr td:last-child {
+  width: 15%;
+  white-space: nowrap;
+}

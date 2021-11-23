@@ -42,6 +42,7 @@ const DisciplinaLista = (props) => {
                             <thead>
                                 <tr>
                                     <th>Disciplina</th>
+                                    <th>Pontos</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,6 +54,9 @@ const DisciplinaLista = (props) => {
                                     onClick={() => props.history.push(`/disciplina/${disciplina.id}`)}>
                                     <td>
                                         {disciplina.nome}
+                                    </td>
+                                    <td>
+                                        {disciplina.pontos}
                                     </td>
                                 </tr>
                             ))
